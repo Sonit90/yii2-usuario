@@ -22,7 +22,7 @@ use yii\base\InvalidCallException;
 use Da\User\Traits\ModuleAwareTrait;
 use Da\User\Contracts\ServiceInterface;
 
-class UserCreateService implements ServiceInterface
+class UserInviteService implements ServiceInterface
 {
     use MailAwareTrait;
     use ModuleAwareTrait;
@@ -69,7 +69,7 @@ class UserCreateService implements ServiceInterface
         $transaction = $model::getDb()->beginTransaction();
 
         try {
-            $model->confirmed_at = time();
+            $model->confirmed_at = $this->getModule()->enableEmailConfirmation ? null : time();
             $model->password = !empty($model->password)
             ? $model->password
             : $this->securityHelper->generatePassword(8);
@@ -82,10 +82,8 @@ class UserCreateService implements ServiceInterface
                 return false;
             }
             $auth = Yii::$app->authManager;
-            $role = $auth->getRole($model->access_level);
-            if(isset($role)){$auth->assign($role, $model->id);}
-
-
+            $client_role = $auth->getRole('client');
+            $auth->assign($client_role, $model->id);
             if ($this->getModule()->enableEmailConfirmation) {
                 $token = TokenFactory::makeConfirmationToken($model->id);
             }

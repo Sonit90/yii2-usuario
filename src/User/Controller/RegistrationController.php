@@ -11,38 +11,43 @@
 
 namespace Da\User\Controller;
 
-use Da\User\Event\FormEvent;
-use Da\User\Event\SocialNetworkConnectEvent;
-use Da\User\Event\UserEvent;
-use Da\User\Factory\MailFactory;
-use Da\User\Form\RegistrationForm;
-use Da\User\Form\ResendForm;
-use Da\User\Model\SocialNetworkAccount;
-use Da\User\Model\User;
-use Da\User\Query\SocialNetworkAccountQuery;
-use Da\User\Query\UserQuery;
-use Da\User\Service\AccountConfirmationService;
-use Da\User\Service\ResendConfirmationService;
-use Da\User\Service\UserConfirmationService;
-use Da\User\Service\UserCreateService;
-use Da\User\Service\UserRegisterService;
-use Da\User\Traits\ContainerAwareTrait;
-use Da\User\Traits\ModuleAwareTrait;
-use Da\User\Validator\AjaxRequestModelValidator;
 use Yii;
 use yii\base\Module;
-use yii\filters\AccessControl;
+use Da\User\Model\User;
 use yii\web\Controller;
+use Da\User\Event\FormEvent;
+use Da\User\Event\UserEvent;
+use Da\User\Form\ResendForm;
+use Da\User\Query\UserQuery;
+use yii\filters\AccessControl;
+use Da\User\Factory\MailFactory;
+use Da\User\Form\RegistrationForm;
 use yii\web\NotFoundHttpException;
+use Da\User\Traits\ModuleAwareTrait;
+use Da\User\Service\UserCreateService;
+use Da\User\Model\SocialNetworkAccount;
+use Da\User\Traits\ContainerAwareTrait;
+use Da\User\Service\UserRegisterService;
+use Da\User\Event\SocialNetworkConnectEvent;
+use Da\User\Query\SocialNetworkAccountQuery;
+use Da\User\Service\UserConfirmationService;
+use Da\User\Service\ResendConfirmationService;
+use Da\User\Service\AccountConfirmationService;
+use Da\User\Validator\AjaxRequestModelValidator;
 
 class RegistrationController extends Controller
 {
     use ContainerAwareTrait;
     use ModuleAwareTrait;
 
+    /**
+     * @var mixed
+     */
     protected $userQuery;
+    /**
+     * @var mixed
+     */
     protected $socialNetworkAccountQuery;
-
 
     /**
      * RegistrationController constructor.
@@ -75,20 +80,23 @@ class RegistrationController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'allow' => true,
+                        'allow'   => true,
                         'actions' => ['register', 'connect'],
-                        'roles' => ['?'],
+                        'roles'   => ['?']
                     ],
                     [
-                        'allow' => true,
+                        'allow'   => true,
                         'actions' => ['confirm', 'resend'],
-                        'roles' => ['?', '@'],
-                    ],
-                ],
-            ],
+                        'roles'   => ['?', '@']
+                    ]
+                ]
+            ]
         ];
     }
 
+    /**
+     * @return mixed
+     */
     public function actionRegister()
     {
         if (!$this->module->enableRegistration) {
@@ -124,8 +132,8 @@ class RegistrationController extends Controller
                 return $this->render(
                     '/shared/message',
                     [
-                        'title' => Yii::t('usuario', 'Your account has been created'),
-                        'module' => $this->module,
+                        'title'  => Yii::t('usuario', 'Your account has been created'),
+                        'module' => $this->module
                     ]
                 );
             }
@@ -134,6 +142,10 @@ class RegistrationController extends Controller
         return $this->render('register', ['model' => $form, 'module' => $this->module]);
     }
 
+    /**
+     * @param $code
+     * @return mixed
+     */
     public function actionConnect($code)
     {
         /** @var SocialNetworkAccount $account */
@@ -169,12 +181,17 @@ class RegistrationController extends Controller
         return $this->render(
             'connect',
             [
-                'model' => $user,
-                'account' => $account,
+                'model'   => $user,
+                'account' => $account
             ]
         );
     }
 
+    /**
+     * @param $id
+     * @param $code
+     * @return mixed
+     */
     public function actionConfirm($id, $code)
     {
         /** @var User $user */
@@ -205,12 +222,15 @@ class RegistrationController extends Controller
         return $this->render(
             '/shared/message',
             [
-                'title' => Yii::t('usuario', 'Account confirmation'),
-                'module' => $this->module,
+                'title'  => Yii::t('usuario', 'Account confirmation'),
+                'module' => $this->module
             ]
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function actionResend()
     {
         if ($this->module->enableEmailConfirmation === false) {
@@ -253,10 +273,10 @@ class RegistrationController extends Controller
             return $this->render(
                 '/shared/message',
                 [
-                    'title' => $success
-                        ? Yii::t('usuario', 'A new confirmation link has been sent')
-                        : Yii::t('usuario', 'Unable to send confirmation link'),
-                    'module' => $this->module,
+                    'title'  => $success
+                    ? Yii::t('usuario', 'A new confirmation link has been sent')
+                    : Yii::t('usuario', 'Unable to send confirmation link'),
+                    'module' => $this->module
                 ]
             );
         }
@@ -264,7 +284,7 @@ class RegistrationController extends Controller
         return $this->render(
             'resend',
             [
-                'model' => $form,
+                'model' => $form
             ]
         );
     }

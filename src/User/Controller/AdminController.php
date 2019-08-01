@@ -11,29 +11,29 @@
 
 namespace Da\User\Controller;
 
-use Da\User\Event\UserEvent;
-use Da\User\Factory\MailFactory;
-use Da\User\Filter\AccessRuleFilter;
-use Da\User\Model\Profile;
-use Da\User\Model\User;
-use Da\User\Query\UserQuery;
-use Da\User\Search\UserSearch;
-use Da\User\Service\PasswordExpireService;
-use Da\User\Service\PasswordRecoveryService;
-use Da\User\Service\SwitchIdentityService;
-use Da\User\Service\UserBlockService;
-use Da\User\Service\UserConfirmationService;
-use Da\User\Service\UserCreateService;
-use Da\User\Traits\ContainerAwareTrait;
-use Da\User\Traits\ModuleAwareTrait;
-use Da\User\Validator\AjaxRequestModelValidator;
 use Yii;
 use yii\base\Module;
-use yii\db\ActiveRecord;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\helpers\Url;
+use Da\User\Model\User;
 use yii\web\Controller;
+use yii\db\ActiveRecord;
+use Da\User\Model\Profile;
+use yii\filters\VerbFilter;
+use Da\User\Event\UserEvent;
+use Da\User\Query\UserQuery;
+use Da\User\Search\UserSearch;
+use yii\filters\AccessControl;
+use Da\User\Factory\MailFactory;
+use Da\User\Filter\AccessRuleFilter;
+use Da\User\Traits\ModuleAwareTrait;
+use Da\User\Service\UserBlockService;
+use Da\User\Service\UserCreateService;
+use Da\User\Traits\ContainerAwareTrait;
+use Da\User\Service\PasswordExpireService;
+use Da\User\Service\SwitchIdentityService;
+use Da\User\Service\PasswordRecoveryService;
+use Da\User\Service\UserConfirmationService;
+use Da\User\Validator\AjaxRequestModelValidator;
 
 class AdminController extends Controller
 {
@@ -79,37 +79,40 @@ class AdminController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::class,
+            'verbs'  => [
+                'class'   => VerbFilter::class,
                 'actions' => [
-                    'delete' => ['post'],
-                    'confirm' => ['post'],
-                    'block' => ['post'],
-                    'switch-identity' => ['post'],
-                    'password-reset' => ['post'],
-                    'force-password-change' => ['post'],
-                ],
+                    'delete'                => ['post'],
+                    'confirm'               => ['post'],
+                    'block'                 => ['post'],
+                    'switch-identity'       => ['post'],
+                    'password-reset'        => ['post'],
+                    'force-password-change' => ['post']
+                ]
             ],
             'access' => [
-                'class' => AccessControl::class,
+                'class'      => AccessControl::class,
                 'ruleConfig' => [
-                    'class' => AccessRuleFilter::class,
+                    'class' => AccessRuleFilter::class
                 ],
-                'rules' => [
+                'rules'      => [
                     [
-                        'allow' => true,
+                        'allow'   => true,
                         'actions' => ['switch-identity'],
-                        'roles' => ['@'],
+                        'roles'   => ['@']
                     ],
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
+                        'roles' => ['admin']
+                    ]
+                ]
+            ]
         ];
     }
 
+    /**
+     * @return mixed
+     */
     public function actionIndex()
     {
         $searchModel = $this->make(UserSearch::class);
@@ -119,11 +122,14 @@ class AdminController extends Controller
             'index',
             [
                 'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
+                'searchModel'  => $searchModel
             ]
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function actionCreate()
     {
         /** @var User $user */
@@ -150,6 +156,10 @@ class AdminController extends Controller
         return $this->render('create', ['user' => $user]);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionUpdate($id)
     {
         $user = $this->userQuery->where(['id' => $id])->one();
@@ -173,6 +183,10 @@ class AdminController extends Controller
         return $this->render('_account', ['user' => $user]);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionUpdateProfile($id)
     {
         /** @var User $user */
@@ -201,12 +215,16 @@ class AdminController extends Controller
         return $this->render(
             '_profile',
             [
-                'user' => $user,
-                'profile' => $profile,
+                'user'    => $user,
+                'profile' => $profile
             ]
         );
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionInfo($id)
     {
         /** @var User $user */
@@ -215,11 +233,15 @@ class AdminController extends Controller
         return $this->render(
             '_info',
             [
-                'user' => $user,
+                'user' => $user
             ]
         );
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionAssignments($id)
     {
         /** @var User $user */
@@ -228,12 +250,16 @@ class AdminController extends Controller
         return $this->render(
             '_assignments',
             [
-                'user' => $user,
-                'params' => Yii::$app->request->post(),
+                'user'   => $user,
+                'params' => Yii::$app->request->post()
             ]
         );
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionConfirm($id)
     {
         /** @var User $user */
@@ -256,9 +282,13 @@ class AdminController extends Controller
         return $this->redirect(Url::previous('actions-redirect'));
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionDelete($id)
     {
-        if ((int)$id === Yii::$app->user->getId()) {
+        if ((int) $id === Yii::$app->user->getId()) {
             Yii::$app->getSession()->setFlash('danger', Yii::t('usuario', 'You cannot remove your own account'));
         } else {
             /** @var User $user */
@@ -281,9 +311,13 @@ class AdminController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionBlock($id)
     {
-        if ((int)$id === Yii::$app->user->getId()) {
+        if ((int) $id === Yii::$app->user->getId()) {
             Yii::$app->getSession()->setFlash('danger', Yii::t('usuario', 'You cannot remove your own account'));
         } else {
             /** @var User $user */
@@ -301,6 +335,10 @@ class AdminController extends Controller
         return $this->redirect(Url::previous('actions-redirect'));
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionSwitchIdentity($id = null)
     {
         if (false === $this->module->enableSwitchIdentities) {
@@ -314,6 +352,10 @@ class AdminController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function actionPasswordReset($id)
     {
         /** @var User $user */
@@ -330,7 +372,7 @@ class AdminController extends Controller
 
         return $this->redirect(['index']);
     }
-    
+
     /**
      * Forces the user to change password at next login
      * @param integer $id

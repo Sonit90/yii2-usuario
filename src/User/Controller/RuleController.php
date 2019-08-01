@@ -11,18 +11,18 @@
 
 namespace Da\User\Controller;
 
-use Da\User\Model\Rule;
-use Da\User\Search\RuleSearch;
-use Da\User\Service\AuthRuleEditionService;
-use Da\User\Traits\AuthManagerAwareTrait;
-use Da\User\Traits\ContainerAwareTrait;
-use Da\User\Validator\AjaxRequestModelValidator;
-use Da\User\Filter\AccessRuleFilter;
 use Yii;
-use yii\filters\VerbFilter;
+use Da\User\Model\Rule;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use Da\User\Search\RuleSearch;
 use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
+use Da\User\Filter\AccessRuleFilter;
+use Da\User\Traits\ContainerAwareTrait;
+use Da\User\Traits\AuthManagerAwareTrait;
+use Da\User\Service\AuthRuleEditionService;
+use Da\User\Validator\AjaxRequestModelValidator;
 
 class RuleController extends Controller
 {
@@ -35,27 +35,30 @@ class RuleController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::class,
+            'verbs'  => [
+                'class'   => VerbFilter::class,
                 'actions' => [
-                    'delete' => ['POST'],
-                ],
+                    'delete' => ['POST']
+                ]
             ],
             'access' => [
-                'class' => AccessControl::class,
+                'class'      => AccessControl::class,
                 'ruleConfig' => [
-                    'class' => AccessRuleFilter::class,
+                    'class' => AccessRuleFilter::class
                 ],
-                'rules' => [
+                'rules'      => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
+                        'roles' => ['superadmin']
+                    ]
+                ]
+            ]
         ];
     }
 
+    /**
+     * @return mixed
+     */
     public function actionIndex()
     {
         /** @var RuleSearch $searchModel */
@@ -65,12 +68,15 @@ class RuleController extends Controller
         return $this->render(
             'index',
             [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                'searchModel'  => $searchModel,
+                'dataProvider' => $dataProvider
             ]
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function actionCreate()
     {
         $model = $this->make(Rule::class, [], ['scenario' => 'create', 'className' => \yii\rbac\Rule::class]);
@@ -94,6 +100,10 @@ class RuleController extends Controller
         );
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function actionUpdate($name)
     {
         /** @var Rule $model */
@@ -103,8 +113,8 @@ class RuleController extends Controller
         $model->setAttributes(
             [
                 'previousName' => $name,
-                'name' => $rule->name,
-                'className' => get_class($rule)
+                'name'         => $rule->name,
+                'className'    => get_class($rule)
             ]
         );
 
@@ -122,11 +132,14 @@ class RuleController extends Controller
         return $this->render(
             'update',
             [
-                'model' => $model,
+                'model' => $model
             ]
         );
     }
 
+    /**
+     * @param $name
+     */
     public function actionDelete($name)
     {
         $rule = $this->findRule($name);

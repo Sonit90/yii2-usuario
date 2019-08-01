@@ -11,9 +11,9 @@
 
 namespace Da\User\Event;
 
+use yii\base\Event;
 use Da\User\Model\User;
 use Da\User\Service\MailService;
-use yii\base\Event;
 
 /**
  * @property-read string $type
@@ -27,15 +27,37 @@ class MailEvent extends Event
     const TYPE_RECOVERY = 'recovery';
     const TYPE_CONFIRM = 'confirm';
     const TYPE_RECONFIRM = 'reconfirm';
+    const TYPE_TICKET = 'ticket';
+    const TYPE_NOTIFY = 'notify';
+    const TYPE_INVITE = 'invite';
 
     const EVENT_BEFORE_SEND_MAIL = 'beforeSendMail';
     const EVENT_AFTER_SEND_MAIL = 'afterSendMail';
 
+    /**
+     * @var mixed
+     */
     protected $type;
+    /**
+     * @var mixed
+     */
     protected $user;
+    /**
+     * @var mixed
+     */
     protected $mailService;
+    /**
+     * @var mixed
+     */
     protected $exception;
 
+    /**
+     * @param $type
+     * @param User $user
+     * @param MailService $mailService
+     * @param $exception
+     * @param array $config
+     */
     public function __construct($type, User $user, MailService $mailService, $exception, $config = [])
     {
         $this->type = $type;
@@ -46,21 +68,33 @@ class MailEvent extends Event
         parent::__construct($config);
     }
 
+    /**
+     * @return mixed
+     */
     public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * @return mixed
+     */
     public function getMailService()
     {
         return $this->mailService;
     }
 
+    /**
+     * @return mixed
+     */
     public function getException()
     {
         return $this->exception;

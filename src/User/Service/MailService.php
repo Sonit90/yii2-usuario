@@ -11,21 +11,45 @@
 
 namespace Da\User\Service;
 
-use Da\User\Contracts\ServiceInterface;
 use Yii;
 use yii\mail\BaseMailer;
 use yii\mail\MailerInterface;
+use Da\User\Contracts\ServiceInterface;
 
 class MailService implements ServiceInterface
 {
+    /**
+     * @var string
+     */
     protected $viewPath = '@Da/User/resources/views/mail';
 
+    /**
+     * @var mixed
+     */
     protected $type;
+    /**
+     * @var mixed
+     */
     protected $from;
+    /**
+     * @var mixed
+     */
     protected $to;
+    /**
+     * @var mixed
+     */
     protected $subject;
+    /**
+     * @var mixed
+     */
     protected $view;
+    /**
+     * @var array
+     */
     protected $params = [];
+    /**
+     * @var mixed
+     */
     protected $mailer;
 
     /**
@@ -80,10 +104,23 @@ class MailService implements ServiceInterface
     public function run()
     {
         return $this->mailer
-            ->compose(['html' => $this->view, 'text' => "text/{$this->view}"], $this->params)
-            ->setFrom($this->from)
-            ->setTo($this->to)
-            ->setSubject($this->subject)
-            ->send();
+                    ->compose(['html' => $this->view, 'text' => "text/{$this->view}"], $this->params)
+                    ->setFrom($this->from)
+                    ->setTo($this->to)
+                    ->setSubject($this->subject)
+                    ->send();
+    }
+    /**
+     * @return mixed
+     */
+    public function queue()
+    {
+
+        return Yii::$app->mailqueue
+                        ->compose(['html' => $this->view, 'text' => "text/{$this->view}"], $this->params)
+                        ->setFrom($this->from)
+                        ->setTo($this->to)
+                        ->setSubject($this->subject)
+                        ->queue();
     }
 }

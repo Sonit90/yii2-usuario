@@ -11,8 +11,8 @@
 
 namespace Da\User;
 
-use Da\User\Contracts\MailChangeStrategyInterface;
 use yii\base\Module as BaseModule;
+use Da\User\Contracts\MailChangeStrategyInterface;
 
 /**
  * This is the main module class of the yii2-usuario extension.
@@ -162,11 +162,11 @@ class Module extends BaseModule
      * @var array the url rules (routes)
      */
     public $routes = [
-        '<id:\d+>' => 'profile/show',
-        '<action:(login|logout)>' => 'security/<action>',
-        '<action:(register|resend)>' => 'registration/<action>',
+        '<id:\d+>'                               => 'profile/show',
+        '<action:(login|logout)>'                => 'security/<action>',
+        '<action:(register|resend)>'             => 'registration/<action>',
         'confirm/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'registration/confirm',
-        'forgot' => 'recovery/request',
+        'forgot'                                 => 'recovery/request',
         'recover/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'recovery/reset'
     ];
     /**
@@ -176,7 +176,7 @@ class Module extends BaseModule
     /**
      * @var string the session key name to impersonate users. Please, modify it for security reasons!
      */
-    public $switchIdentitySessionKey = 'yuik_usuario';
+    public $switchIdentitySessionKey = 'yuik_usuarioewq';
     /**
      * @var integer If != NULL sets a max password age in days
      */

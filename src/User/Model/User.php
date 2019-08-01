@@ -11,20 +11,20 @@
 
 namespace Da\User\Model;
 
-use Da\User\Helper\SecurityHelper;
-use Da\User\Query\UserQuery;
-use Da\User\Traits\ContainerAwareTrait;
-use Da\User\Traits\ModuleAwareTrait;
 use Yii;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
+use yii\web\Application;
+use Da\User\Query\UserQuery;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
+use Da\User\Helper\SecurityHelper;
 use yii\base\InvalidParamException;
 use yii\base\NotSupportedException;
+use Da\User\Traits\ModuleAwareTrait;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\web\Application;
-use yii\web\IdentityInterface;
+use Da\User\Traits\ContainerAwareTrait;
 
 /**
  * User ActiveRecord model.
@@ -72,6 +72,8 @@ class User extends ActiveRecord implements IdentityInterface
      * @var string Plain password. Used for model validation
      */
     public $password;
+
+    public $access_level;
     /**
      * @var array connected account list
      */
@@ -112,7 +114,16 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('Method "' . __CLASS__ . '::' . __METHOD__ . '" is not implemented.');
+        //throw new NotSupportedException('Method "' . __CLASS__ . '::' . __METHOD__ . '" is not implemented.');
+        return static::findOne(['auth_key' => $token]);
+    }
+
+    /**
+     * @param $email
+     */
+    public static function findIdentityByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
     }
 
     /**
@@ -161,12 +172,12 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         $behaviors = [
-            TimestampBehavior::class,
+            TimestampBehavior::class
         ];
 
         if ($this->module->enableGdprCompliance) {
             $behaviors['GDPR'] = [
-                'class' => TimestampBehavior::class,
+                'class'              => TimestampBehavior::class,
                 'createdAtAttribute' => 'gdpr_consent_date',
                 'updatedAtAttribute' => false
             ];
@@ -181,17 +192,18 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'username' => Yii::t('usuario', 'Username'),
-            'email' => Yii::t('usuario', 'Email'),
-            'registration_ip' => Yii::t('usuario', 'Registration IP'),
-            'unconfirmed_email' => Yii::t('usuario', 'New email'),
-            'password' => Yii::t('usuario', 'Password'),
-            'created_at' => Yii::t('usuario', 'Registration time'),
-            'confirmed_at' => Yii::t('usuario', 'Confirmation time'),
-            'last_login_at' => Yii::t('usuario', 'Last login time'),
-            'last_login_ip' => Yii::t('usuario', 'Last login IP'),
+            // 'username' => Yii::t('usuario', 'Username'),
+            'email'               => Yii::t('usuario', 'Email'),
+            'registration_ip'     => Yii::t('usuario', 'Registration IP'),
+            'unconfirmed_email'   => Yii::t('usuario', 'New email'),
+            'password'            => Yii::t('usuario', 'Password'),
+            'created_at'          => Yii::t('usuario', 'Registration time'),
+            'confirmed_at'        => Yii::t('usuario', 'Confirmation time'),
+            'last_login_at'       => Yii::t('usuario', 'Last login time'),
+            'last_login_ip'       => Yii::t('usuario', 'Last login IP'),
             'password_changed_at' => Yii::t('usuario', 'Last password change'),
-            'password_age' => Yii::t('usuario', 'Password age'),
+            'password_age'        => Yii::t('usuario', 'Password age'),
+            'access_level'=>'Уровень доступа'
         ];
     }
 
@@ -203,11 +215,11 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::merge(
             parent::scenarios(),
             [
-                'register' => ['username', 'email', 'password'],
-                'connect' => ['username', 'email'],
-                'create' => ['username', 'email', 'password'],
-                'update' => ['username', 'email', 'password'],
-                'settings' => ['username', 'email', 'password'],
+                'register' => ['email', 'password'],
+                'connect'  => ['email'],
+                'create'   => ['email', 'password','access_level'],
+                'update'   => ['email', 'password'],
+                'settings' => ['email', 'password']
             ]
         );
     }
@@ -219,35 +231,36 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             // username rules
-            'usernameRequired' => ['username', 'required', 'on' => ['register', 'create', 'connect', 'update']],
-            'usernameMatch' => ['username', 'match', 'pattern' => '/^[-a-zA-Z0-9_\.@\+]+$/'],
-            'usernameLength' => ['username', 'string', 'min' => 3, 'max' => 255],
-            'usernameTrim' => ['username', 'trim'],
-            'usernameUnique' => [
-                'username',
-                'unique',
-                'message' => Yii::t('usuario', 'This username has already been taken'),
-            ],
+            // 'usernameRequired' => ['username', 'required', 'on' => ['register', 'create', 'connect', 'update']],
+            // 'usernameMatch' => ['username', 'match', 'pattern' => '/^[-a-zA-Z0-9_\.@\+]+$/'],
+            // 'usernameLength' => ['username', 'string', 'min' => 3, 'max' => 255],
+            // 'usernameTrim' => ['username', 'trim'],
+            // 'usernameUnique' => [
+            //     'username',
+            //     'unique',
+            //     'message' => Yii::t('usuario', 'This username has already been taken'),
+            // ],
 
             // email rules
-            'emailRequired' => ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
-            'emailPattern' => ['email', 'email'],
-            'emailLength' => ['email', 'string', 'max' => 255],
-            'emailUnique' => [
+            'access_level'=>['access_level', 'string'],
+            'emailRequired'          => ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
+            'emailPattern'           => ['email', 'email'],
+            'emailLength'            => ['email', 'string', 'max' => 255],
+            'emailUnique'            => [
                 'email',
                 'unique',
-                'message' => Yii::t('usuario', 'This email address has already been taken'),
+                'message' => Yii::t('usuario', 'This email address has already been taken')
             ],
-            'emailTrim' => ['email', 'trim'],
+            'emailTrim'              => ['email', 'trim'],
 
             // password rules
-            'passwordTrim' => ['password', 'trim'],
-            'passwordRequired' => ['password', 'required', 'on' => ['register']],
-            'passwordLength' => ['password', 'string', 'min' => 6, 'max' => 72, 'on' => ['register', 'create']],
+            'passwordTrim'           => ['password', 'trim'],
+            'passwordRequired'       => ['password', 'required', 'on' => ['register']],
+            'passwordLength'         => ['password', 'string', 'min' => 6, 'max' => 72, 'on' => ['register', 'create']],
 
             // two factor auth rules
-            'twoFactorSecretTrim' => ['auth_tf_key', 'trim'],
-            'twoFactorSecretLength' => ['auth_tf_key', 'string', 'max' => 16],
+            'twoFactorSecretTrim'    => ['auth_tf_key', 'trim'],
+            'twoFactorSecretLength'  => ['auth_tf_key', 'string', 'max' => 16],
             'twoFactorEnabledNumber' => ['auth_tf_enabled', 'integer']
         ];
     }
@@ -290,7 +303,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getIsAdmin()
     {
-        return $this->getAuth()->isAdmin($this->username);
+        return $this->getAuth()->isAdmin($this->id);
     }
 
     /**
@@ -334,11 +347,11 @@ class User extends ActiveRecord implements IdentityInterface
         if (null === $this->connectedAccounts) {
             /** @var SocialNetworkAccount[] $accounts */
             $accounts = $this->hasMany(
-                $this->getClassMap()
-                    ->get(SocialNetworkAccount::class),
-                ['user_id' => 'id']
-            )
-                ->all();
+                                 $this->getClassMap()
+                                      ->get(SocialNetworkAccount::class),
+                                 ['user_id' => 'id']
+                             )
+                             ->all();
 
             foreach ($accounts as $account) {
                 $this->connectedAccounts[$account->provider] = $account;

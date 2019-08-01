@@ -12,7 +12,7 @@
 namespace Da\User\Service;
 
 use Da\User\Contracts\ServiceInterface;
-use Da\User\Controller\AdminController;
+use app\controllers\AdminController;
 use Da\User\Event\UserEvent;
 use Da\User\Helper\SecurityHelper;
 use Da\User\Model\User;

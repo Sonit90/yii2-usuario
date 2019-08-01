@@ -11,14 +11,14 @@
 
 namespace Da\User\Helper;
 
-use Da\User\Model\AbstractAuthItem;
-use Da\User\Module;
-use Da\User\Traits\AuthManagerAwareTrait;
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\rbac\Permission;
 use yii\rbac\Role;
 use yii\rbac\Rule;
+use Da\User\Module;
+use yii\rbac\Permission;
+use yii\helpers\ArrayHelper;
+use Da\User\Model\AbstractAuthItem;
+use Da\User\Traits\AuthManagerAwareTrait;
 
 class AuthHelper
 {
@@ -48,15 +48,15 @@ class AuthHelper
      *
      * @return bool
      */
-    public function isAdmin($username)
+    public function isAdmin($id)
     {
         /** @var Module $module */
         $module = Yii::$app->getModule('user');
         $hasAdministratorPermissionName = $this->getAuthManager() && $module->administratorPermissionName
-            ? Yii::$app->getUser()->can($module->administratorPermissionName)
-            : false;
+        ? Yii::$app->getUser()->can($module->administratorPermissionName)
+        : false;
 
-        return $hasAdministratorPermissionName || in_array($username, $module->administrators, false);
+        return $hasAdministratorPermissionName || in_array($id, $module->administrators, false);
     }
 
     /**

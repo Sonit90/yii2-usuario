@@ -91,9 +91,9 @@
         "bootstrap": "Da\\User\\Bootstrap"
     },
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+         {
+                "type": "vcs",
+                "url": "https://github.com/Sonit90/yii2-usuario"
         }
     ]
 }

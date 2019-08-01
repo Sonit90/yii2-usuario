@@ -11,10 +11,10 @@
 
 namespace Da\User\Form;
 
-use Da\User\Query\UserQuery;
-use Da\User\Traits\ContainerAwareTrait;
 use Yii;
 use yii\base\Model;
+use Da\User\Query\UserQuery;
+use Da\User\Traits\ContainerAwareTrait;
 
 class RecoveryForm extends Model
 {
@@ -52,8 +52,9 @@ class RecoveryForm extends Model
     public function attributeLabels()
     {
         return [
-            'email' => Yii::t('usuario', 'Email'),
+            'email'    => Yii::t('usuario', 'Email'),
             'password' => Yii::t('usuario', 'Password'),
+            'captcha'  => 'Проверочный код'
         ];
     }
 
@@ -64,7 +65,7 @@ class RecoveryForm extends Model
     {
         return [
             self::SCENARIO_REQUEST => ['email'],
-            self::SCENARIO_RESET => ['password'],
+            self::SCENARIO_RESET   => ['password']
         ];
     }
 
@@ -74,11 +75,11 @@ class RecoveryForm extends Model
     public function rules()
     {
         return [
-            'emailTrim' => ['email', 'filter', 'filter' => 'trim'],
-            'emailRequired' => ['email', 'required'],
-            'emailPattern' => ['email', 'email'],
+            'emailTrim'        => ['email', 'filter', 'filter' => 'trim'],
+            'emailRequired'    => ['email', 'required'],
+            'emailPattern'     => ['email', 'email'],
             'passwordRequired' => ['password', 'required'],
-            'passwordLength' => ['password', 'string', 'max' => 72, 'min' => 6],
+            'passwordLength'   => ['password', 'string', 'max' => 72, 'min' => 6]
         ];
     }
 }

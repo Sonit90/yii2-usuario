@@ -11,12 +11,12 @@
 
 namespace Da\User\Factory;
 
-use Da\User\Event\MailEvent;
-use Da\User\Model\Token;
-use Da\User\Model\User;
-use Da\User\Module;
-use Da\User\Service\MailService;
 use Yii;
+use Da\User\Module;
+use Da\User\Model\User;
+use Da\User\Model\Token;
+use Da\User\Event\MailEvent;
+use Da\User\Service\MailService;
 use yii\base\InvalidConfigException;
 
 class MailFactory
@@ -36,10 +36,10 @@ class MailFactory
         $from = $module->mailParams['fromEmail'];
         $subject = $module->mailParams['welcomeMailSubject'];
         $params = [
-            'user' => $user,
-            'token' => null,
-            'module' => $module,
-            'showPassword' => $showPassword,
+            'user'         => $user,
+            'token'        => null,
+            'module'       => $module,
+            'showPassword' => $showPassword
         ];
 
         return static::makeMailerService(MailEvent::TYPE_WELCOME, $from, $to, $subject, 'welcome', $params);
@@ -60,8 +60,8 @@ class MailFactory
         $from = $module->mailParams['fromEmail'];
         $subject = $module->mailParams['recoveryMailSubject'];
         $params = [
-            'user' => $token && $token->user ? $token->user : null,
-            'token' => $token,
+            'user'  => $token && $token->user ? $token->user : null,
+            'token' => $token
         ];
 
         return static::makeMailerService(MailEvent::TYPE_RECOVERY, $from, $to, $subject, 'recovery', $params);
@@ -82,11 +82,11 @@ class MailFactory
         $from = $module->mailParams['fromEmail'];
         $subject = $module->mailParams['confirmationMailSubject'];
         $params = [
-            'user' => $token && $token->user ? $token->user : null,
-            'token' => $token,
+            'user'  => $token && $token->user ? $token->user : null,
+            'token' => $token
         ];
 
-        return static::makeMailerService(MailEvent::TYPE_CONFIRM, $from, $to, $subject, 'recovery', $params);
+        return static::makeMailerService(MailEvent::TYPE_CONFIRM, $from, $to, $subject, 'confirmation', $params);
     }
 
     /**
@@ -101,14 +101,14 @@ class MailFactory
         /** @var Module $module */
         $module = Yii::$app->getModule('user');
         $to = $token->type === Token::TYPE_CONFIRM_NEW_EMAIL
-            ? $user->unconfirmed_email
-            : $user->email;
+        ? $user->unconfirmed_email
+        : $user->email;
 
         $from = $module->mailParams['fromEmail'];
         $subject = $module->mailParams['reconfirmationMailSubject'];
         $params = [
-            'user' => $token && $token->user ? $token->user : null,
-            'token' => $token,
+            'user'  => $token && $token->user ? $token->user : null,
+            'token' => $token
         ];
 
         return static::makeMailerService(MailEvent::TYPE_RECONFIRM, $from, $to, $subject, 'reconfirmation', $params);
@@ -130,7 +130,7 @@ class MailFactory
      */
     public static function makeMailerService($type, $from, $to, $subject, $view, $params = [])
     {
-        if ($from instanceof \Closure){
+        if ($from instanceof \Closure) {
             $from = $from($type);
         }
         /** @noinspection PhpIncompatibleReturnTypeInspection */

@@ -11,15 +11,15 @@
 
 namespace Da\User\Model;
 
-use Da\User\Helper\SecurityHelper;
-use Da\User\Query\TokenQuery;
-use Da\User\Traits\ContainerAwareTrait;
-use Da\User\Traits\ModuleAwareTrait;
-use RuntimeException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
-use yii\db\ActiveRecord;
 use yii\helpers\Url;
+use RuntimeException;
+use yii\db\ActiveRecord;
+use Da\User\Query\TokenQuery;
+use Da\User\Helper\SecurityHelper;
+use yii\base\InvalidParamException;
+use Da\User\Traits\ModuleAwareTrait;
+use yii\base\InvalidConfigException;
+use Da\User\Traits\ContainerAwareTrait;
 
 /**
  * Token Active Record model.
@@ -41,12 +41,17 @@ class Token extends ActiveRecord
     const TYPE_RECOVERY = 1;
     const TYPE_CONFIRM_NEW_EMAIL = 2;
     const TYPE_CONFIRM_OLD_EMAIL = 3;
+    // const TYPE_REGISTRATION = 4;
 
+    /**
+     * @var array
+     */
     protected $routes = [
-        self::TYPE_CONFIRMATION => '/user/registration/confirm',
-        self::TYPE_RECOVERY => '/user/recovery/reset',
+        self::TYPE_CONFIRMATION      => '/user/registration/confirm',
+        self::TYPE_RECOVERY          => '/user/recovery/reset',
         self::TYPE_CONFIRM_NEW_EMAIL => '/user/settings/confirm',
-        self::TYPE_CONFIRM_OLD_EMAIL => '/user/settings/confirm',
+        self::TYPE_CONFIRM_OLD_EMAIL => '/user/settings/confirm'
+        // self::TYPE_REGISTRATION      => '/user/register'
     ];
 
     /**

@@ -11,26 +11,43 @@
 
 namespace Da\User\Service;
 
-use Da\User\Contracts\ServiceInterface;
-use Da\User\Controller\AdminController;
-use Da\User\Event\UserEvent;
-use Da\User\Model\User;
-use Da\User\Module;
-use Da\User\Query\UserQuery;
-use Da\User\Traits\ContainerAwareTrait;
 use Yii;
-use yii\web\ForbiddenHttpException;
+use Da\User\Module;
+use Da\User\Model\User;
+use Da\User\Event\UserEvent;
+use Da\User\Query\UserQuery;
 use yii\web\IdentityInterface;
+use yii\web\ForbiddenHttpException;
+use app\controllers\AdminController;
+use Da\User\Contracts\ServiceInterface;
+use Da\User\Traits\ContainerAwareTrait;
 
 class SwitchIdentityService implements ServiceInterface
 {
     use ContainerAwareTrait;
 
+    /**
+     * @var mixed
+     */
     protected $controller;
+    /**
+     * @var mixed
+     */
     protected $switchIdentitySessionKey;
+    /**
+     * @var mixed
+     */
     protected $userId;
+    /**
+     * @var mixed
+     */
     protected $userQuery;
 
+    /**
+     * @param AdminController $controller
+     * @param UserQuery $userQuery
+     * @param $userId
+     */
     public function __construct(AdminController $controller, UserQuery $userQuery, $userId = null)
     {
         /** @var Module $module */
@@ -44,13 +61,14 @@ class SwitchIdentityService implements ServiceInterface
     public function run()
     {
         $session = Yii::$app->session;
-        if (null === $this->userId) { // switch back identities
+        if (null === $this->userId) {
+            // switch back identities
             $user = $this->userQuery->whereId($session->get($this->switchIdentitySessionKey))->one();
             $session->remove($this->switchIdentitySessionKey);
         } else {
             /** @var User $identity */
-            $identity = Yii::$app->user->identity;
-            if (!$identity->getIsAdmin()) {
+            // $identity = Yii::$app->user->identity;
+            if (!\Yii::$app->user->can('indexAllTickets')) {
                 // Only admins allowed on module. Developers can override the service and implement different
                 // approach. For example, by roles other than, and including, admin.
                 throw new ForbiddenHttpException();
