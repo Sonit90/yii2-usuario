@@ -21,7 +21,6 @@ use Yii;
 use yii\authclient\Collection;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
-use yii\base\Event as YiiEvent;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\console\Application as ConsoleApplication;
@@ -44,6 +43,7 @@ class Bootstrap implements BootstrapInterface
         if ($app->hasModule('user') && $app->getModule('user') instanceof Module) {
             $map = $this->buildClassMap($app->getModule('user')->classMap);
             $this->initContainer($app, $map);
+            $this->initTranslations($app);
             $this->initMailServiceConfiguration($app, $app->getModule('user'));
 
             if ($app instanceof WebApplication) {
@@ -61,8 +61,8 @@ class Bootstrap implements BootstrapInterface
     /**
      * Initialize container with module classes.
      *
-     * @param \yii\base\Application $app
-     * @param array                 $map the previously built class map list
+     * @param Application $app
+     * @param array $map the previously built class map list
      */
     protected function initContainer($app, $map)
     {
@@ -155,6 +155,24 @@ class Bootstrap implements BootstrapInterface
         }
     }
 
+
+    /**
+     * Registers module translation messages.
+     *
+     * @param Application $app
+     *
+     * @throws InvalidConfigException
+     */
+    protected function initTranslations(Application $app)
+    {
+        if (!isset($app->get('i18n')->translations['usuario*'])) {
+            $app->get('i18n')->translations['usuario*'] = [
+                'class' => PhpMessageSource::class,
+                'basePath' => __DIR__ . '/resources/i18n',
+                'sourceLanguage' => 'en-US',
+            ];
+        }
+    }
 
     /**
      * Ensures the auth manager is the one provided by the library.
