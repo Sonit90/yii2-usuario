@@ -37,11 +37,9 @@ use yii\web\IdentityInterface;
  *
  * Database fields:
  * @property int $id
- * @property string $username
  * @property string $email
  * @property string $unconfirmed_email
  * @property string $password_hash
- * @property string $auth_key
  * @property string $auth_tf_key
  * @property int $auth_tf_enabled
  * @property string $registration_ip
@@ -123,7 +121,6 @@ class User extends ActiveRecord implements IdentityInterface
         /** @var SecurityHelper $security */
         $security = $this->make(SecurityHelper::class);
         if ($insert) {
-            $this->setAttribute('auth_key', $security->generateRandomString());
             if (Yii::$app instanceof Application) {
                 $this->setAttribute('registration_ip', Yii::$app->request->getUserIP());
             }
@@ -181,7 +178,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'username' => Yii::t('usuario', 'Username'),
             'email' => Yii::t('usuario', 'Email'),
             'registration_ip' => Yii::t('usuario', 'Registration IP'),
             'unconfirmed_email' => Yii::t('usuario', 'New email'),
@@ -218,7 +214,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            // username rules
             // email rules
             'emailRequired' => ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
             'emailPattern' => ['email', 'email'],
@@ -242,13 +237,7 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAttribute('auth_key') === $authKey;
-    }
+
 
     /**
      * {@inheritdoc}
@@ -258,13 +247,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getAttribute('id');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->getAttribute('auth_key');
-    }
 
     /**
      * @return bool whether is blocked or not
@@ -274,14 +256,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->blocked_at !== null;
     }
 
-    /**
-     * @throws InvalidConfigException
-     * @return bool                   whether the user is an admin or not
-     */
-    public function getIsAdmin()
-    {
-        return $this->getAuth()->isAdmin($this->username);
-    }
 
     /**
      * Returns whether user account has been confirmed or not.
