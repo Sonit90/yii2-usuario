@@ -45,7 +45,7 @@ class UserBlockService implements ServiceInterface
         } else {
             $this->triggerEvents(UserEvent::EVENT_BEFORE_BLOCK);
             $result = (bool)$this->model->updateAttributes(
-                ['blocked_at' => time(), 'auth_key' => $this->securityHelper->generateRandomString()]
+                ['blocked_at' => time()]
             );
             $this->triggerEvents(UserEvent::EVENT_AFTER_BLOCK);
         }

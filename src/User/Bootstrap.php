@@ -44,12 +44,10 @@ class Bootstrap implements BootstrapInterface
         if ($app->hasModule('user') && $app->getModule('user') instanceof Module) {
             $map = $this->buildClassMap($app->getModule('user')->classMap);
             $this->initContainer($app, $map);
-            $this->initTranslations($app);
             $this->initMailServiceConfiguration($app, $app->getModule('user'));
 
             if ($app instanceof WebApplication) {
                 $this->initControllerNamespace($app);
-                $this->initUrlRoutes($app);
                 $this->initAuthCollection($app);
                 $this->initAuthManager($app);
             } else {
@@ -79,13 +77,6 @@ class Bootstrap implements BootstrapInterface
             $di->set(Event\UserEvent::class);
             $di->set(Event\GdprEvent::class);
 
-            // forms
-            $di->set(Form\LoginForm::class);
-            $di->set(Form\RecoveryForm::class);
-            $di->set(Form\RegistrationForm::class);
-            $di->set(Form\ResendForm::class);
-            $di->set(Form\SettingsForm::class);
-            $di->set(Form\GdprDeleteForm::class);
 
             // helpers
             $di->set(Helper\AuthHelper::class);
@@ -150,25 +141,11 @@ class Bootstrap implements BootstrapInterface
                 $di->set(Search\RoleSearch::class);
             }
 
-            // Attach an event to check if the password has expired
-            if (null !== Yii::$app->getModule('user')->maxPasswordAge) {
-                YiiEvent::on(SecurityController::class, FormEvent::EVENT_AFTER_LOGIN, function (FormEvent $event) {
-                    $user = $event->form->user;
-                    if ($user->password_age >= Yii::$app->getModule('user')->maxPasswordAge) {
-                        // Force password change
-                        Yii::$app->session->setFlash('warning', Yii::t('usuario', 'Your password has expired, you must change it now'));
-                        Yii::$app->response->redirect(['/user/settings/account'])->send();
-                    }
-                });
-            }
-
             if ($app instanceof WebApplication) {
                 // override Yii
                 $di->set(
                     'yii\web\User',
                     [
-                        'enableAutoLogin' => $app->getModule('user')->enableAutoLogin,
-                        'loginUrl' => ['/user/security/login'],
                         'identityClass' => $di->get(ClassMapHelper::class)->get(User::class),
                     ]
                 );
@@ -178,23 +155,6 @@ class Bootstrap implements BootstrapInterface
         }
     }
 
-    /**
-     * Registers module translation messages.
-     *
-     * @param Application $app
-     *
-     * @throws InvalidConfigException
-     */
-    protected function initTranslations(Application $app)
-    {
-        if (!isset($app->get('i18n')->translations['usuario*'])) {
-            $app->get('i18n')->translations['usuario*'] = [
-                'class' => PhpMessageSource::class,
-                'basePath' => __DIR__ . '/resources/i18n',
-                'sourceLanguage' => 'en-US',
-            ];
-        }
-    }
 
     /**
      * Ensures the auth manager is the one provided by the library.
@@ -215,30 +175,6 @@ class Bootstrap implements BootstrapInterface
         }
     }
 
-    /**
-     * Initializes web url routes (rules in Yii2).
-     *
-     * @param WebApplication $app
-     *
-     * @throws InvalidConfigException
-     */
-    protected function initUrlRoutes(WebApplication $app)
-    {
-        /** @var $module Module */
-        $module = $app->getModule('user');
-        $config = [
-            'class' => 'yii\web\GroupUrlRule',
-            'prefix' => $module->prefix,
-            'rules' => $module->routes,
-        ];
-
-        if ($module->prefix !== 'user') {
-            $config['routePrefix'] = 'user';
-        }
-
-        $rule = Yii::createObject($config);
-        $app->getUrlManager()->addRules([$rule], false);
-    }
 
     /**
      * Ensures required mail parameters needed for the mail service.
@@ -315,16 +251,6 @@ class Bootstrap implements BootstrapInterface
             'Assignment' => 'Da\User\Model\Assignment',
             'Permission' => 'Da\User\Model\Permission',
             'Role' => 'Da\User\Model\Role',
-            // --- search
-            'UserSearch' => 'Da\User\Search\UserSearch',
-            'PermissionSearch' => 'Da\User\Search\PermissionSearch',
-            'RoleSearch' => 'Da\User\Search\RoleSearch',
-            // --- forms
-            'RegistrationForm' => 'Da\User\Form\RegistrationForm',
-            'ResendForm' => 'Da\User\Form\ResendForm',
-            'LoginForm' => 'Da\User\Form\LoginForm',
-            'SettingsForm' => 'Da\User\Form\SettingsForm',
-            'RecoveryForm' => 'Da\User\Form\RecoveryForm',
         ];
 
         $routes = [
@@ -336,19 +262,7 @@ class Bootstrap implements BootstrapInterface
                 'Assignment',
                 'Permission',
                 'Role',
-            ],
-            'Da\User\Search' => [
-                'UserSearch',
-                'PermissionSearch',
-                'RoleSearch',
-            ],
-            'Da\User\Form' => [
-                'RegistrationForm',
-                'ResendForm',
-                'LoginForm',
-                'SettingsForm',
-                'RecoveryForm',
-            ],
+            ]
         ];
 
         $mapping = array_merge($defaults, $userClassMap);

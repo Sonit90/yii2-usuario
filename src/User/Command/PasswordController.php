@@ -36,15 +36,15 @@ class PasswordController extends Controller
     /**
      * This command updates the user's password.
      *
-     * @param string $usernameOrEmail Username or email of the user who's password needs to be updated
+     * @param string $email Username or email of the user who's password needs to be updated
      * @param string $password        The new password
      *
      * @throws InvalidConfigException
      */
-    public function actionIndex($usernameOrEmail, $password)
+    public function actionIndex($email, $password)
     {
         /** @var User $user */
-        $user = $this->userQuery->whereUsernameOrEmail($usernameOrEmail)->one();
+        $user = $this->userQuery->wherEmail($email)->one();
 
         if ($user === null) {
             $this->stdout(Yii::t('usuario', 'User is not found') . "\n", Console::FG_RED);

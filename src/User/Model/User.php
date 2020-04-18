@@ -44,7 +44,6 @@ use yii\web\Application;
  * @property string $registration_ip
  * @property int $confirmed_at
  * @property int $blocked_at
- * @property int $flags
  * @property int $created_at
  * @property int $updated_at
  * @property int $last_login_at

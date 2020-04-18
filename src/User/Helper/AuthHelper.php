@@ -44,22 +44,6 @@ class AuthHelper
     }
 
     /**
-     * @param $username
-     *
-     * @return bool
-     */
-    public function isAdmin($username)
-    {
-        /** @var Module $module */
-        $module = Yii::$app->getModule('user');
-        $hasAdministratorPermissionName = $this->getAuthManager() && $module->administratorPermissionName
-            ? Yii::$app->getUser()->can($module->administratorPermissionName)
-            : false;
-
-        return $hasAdministratorPermissionName || in_array($username, $module->administrators, false);
-    }
-
-    /**
      * @param $name
      *
      * @return null|\yii\rbac\Item|Permission

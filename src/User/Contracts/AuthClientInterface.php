@@ -15,7 +15,6 @@ use yii\authclient\ClientInterface;
 
 /**
  * @property-read string $email
- * @property-read string $username
  */
 interface AuthClientInterface extends ClientInterface
 {
@@ -24,8 +23,5 @@ interface AuthClientInterface extends ClientInterface
      */
     public function getEmail();
 
-    /**
-     * @return string|null username
-     */
-    public function getUserName();
+
 }

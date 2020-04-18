@@ -39,9 +39,9 @@ class ConfirmController extends Controller
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($usernameOrEmail)
+    public function actionIndex($email)
     {
-        $user = $this->userQuery->whereUsernameOrEmail($usernameOrEmail)->one();
+        $user = $this->userQuery->whereEmail($email)->one();
         if ($user === null) {
             $this->stdout(Yii::t('usuario', 'User is not found') . "\n", Console::FG_RED);
         } elseif ($this->make(UserConfirmationService::class, [$user])->run()) {

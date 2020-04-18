@@ -32,16 +32,16 @@ class DeleteController extends Controller
     /**
      * This command deletes a user.
      *
-     * @param string $usernameOrEmail Email or username of the user to delete
+     * @param string $email Email or username of the user to delete
      *
      *
      * @throws Throwable
      * @throws StaleObjectException
      */
-    public function actionIndex($usernameOrEmail)
+    public function actionIndex($email)
     {
         if ($this->confirm(Yii::t('usuario', 'Are you sure? Deleted user can not be restored'))) {
-            $user = $this->userQuery->whereUsernameOrEmail($usernameOrEmail)->one();
+            $user = $this->userQuery->whereEmail($email)->one();
             if ($user === null) {
                 $this->stdout(Yii::t('usuario', 'User is not found') . "\n", Console::FG_RED);
             } else {
