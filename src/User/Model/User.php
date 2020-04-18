@@ -24,7 +24,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\Application;
-use yii\web\IdentityInterface;
 
 /**
  * User ActiveRecord model.
@@ -57,7 +56,7 @@ use yii\web\IdentityInterface;
  * @property SocialNetworkAccount[] $socialNetworkAccounts
  * @property Profile $profile
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord
 {
     use ModuleAwareTrait;
     use ContainerAwareTrait;
