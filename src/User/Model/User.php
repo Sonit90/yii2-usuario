@@ -203,11 +203,11 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::merge(
             parent::scenarios(),
             [
-                'register' => ['username', 'email', 'password'],
-                'connect' => ['username', 'email'],
-                'create' => ['username', 'email', 'password'],
-                'update' => ['username', 'email', 'password'],
-                'settings' => ['username', 'email', 'password'],
+                'register' => ['email', 'password'],
+                'connect' => ['email'],
+                'create' => ['email', 'password'],
+                'update' => ['email', 'password'],
+                'settings' => ['email', 'password'],
             ]
         );
     }
@@ -219,16 +219,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             // username rules
-            'usernameRequired' => ['username', 'required', 'on' => ['register', 'create', 'connect', 'update']],
-            'usernameMatch' => ['username', 'match', 'pattern' => '/^[-a-zA-Z0-9_\.@\+]+$/'],
-            'usernameLength' => ['username', 'string', 'min' => 3, 'max' => 255],
-            'usernameTrim' => ['username', 'trim'],
-            'usernameUnique' => [
-                'username',
-                'unique',
-                'message' => Yii::t('usuario', 'This username has already been taken'),
-            ],
-
             // email rules
             'emailRequired' => ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
             'emailPattern' => ['email', 'email'],
