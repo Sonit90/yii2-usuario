@@ -47,7 +47,6 @@ class Module extends BaseModule
         'username',
         'profile.public_email',
         'profile.name',
-        'profile.gravatar_email',
         'profile.location',
         'profile.website',
         'profile.bio'
