@@ -1,12 +1,12 @@
 {
-    "name": "2amigos/yii2-usuario",
+    "name": "sonit90/yii2-usuario-api",
     "description": "Highly customizable and extensible user management, authentication, and authorization Yii2 extension",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/2amigos/yii2-usuario/issues?state=open",
         "forum": "https://gitter.im/2amigos/yii2-usuario",
-        "source": "https://github.com/2amigos/yii2-usuario"
+        "source": "https://github.com/Sonit90/yii2-usuario-api"
     },
     "keywords": [
         "2amigos",
@@ -87,8 +87,8 @@
     },
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+            "type": "vcs",
+            "url": "https://github.com/Sonit90/yii2-usuario-api"
         }
     ]
 }
