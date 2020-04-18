@@ -69,7 +69,6 @@ class Bootstrap implements BootstrapInterface
         $di = Yii::$container;
         try {
             // events
-            $di->set(Event\FormEvent::class);
             $di->set(Event\ProfileEvent::class);
             $di->set(Event\ResetPasswordEvent::class);
             $di->set(Event\SocialNetworkAuthEvent::class);
@@ -80,7 +79,6 @@ class Bootstrap implements BootstrapInterface
 
             // helpers
             $di->set(Helper\AuthHelper::class);
-            $di->set(Helper\GravatarHelper::class);
             $di->set(Helper\SecurityHelper::class);
             $di->set(Helper\TimezoneHelper::class);
 
