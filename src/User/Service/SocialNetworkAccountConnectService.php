@@ -83,7 +83,7 @@ class SocialNetworkAccountConnectService implements ServiceInterface
                 [],
                 [
                     'provider' => $this->client->getId(),
-                    'client_id' => $data['id'],
+                    'clientId' => $data['id'],
                     'data' => json_encode($data),
                 ]
             );

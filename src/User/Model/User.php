@@ -31,26 +31,26 @@ use yii\web\Application;
  * @property bool $isAdmin
  * @property bool $isBlocked
  * @property bool $isConfirmed      whether user account has been confirmed or not
- * @property bool $gdpDeleted     whether user requested deletion of his account
- * @property bool $gdpConsent     whether user has consent personal data processing
+ * @property bool $gdprDeleted     whether user requested deletion of his account
+ * @property bool $gdprConsent     whether user has consent personal data processing
  *
  * Database fields:
  * @property int $id
  * @property string $email
- * @property string $unconfirmeEmail
- * @property string $passworHash
+ * @property string $unconfirmedEmail
+ * @property string $passwordHash
  * @property string $authTfKey
  * @property int $authTfEnabled
- * @property string $registratioIp
- * @property int $confirmeAt
- * @property int $blockeAt
- * @property int $createAt
- * @property int $updateAt
- * @property int $lasLogiAt
- * @property int $gdpConsenDate date of agreement of data processing
- * @property string $lasLogiIp
- * @property int $passworChangeAt
- * @property int $passworAge
+ * @property string $registrationIp
+ * @property int $confirmedAt
+ * @property int $blockedAt
+ * @property int $createdAt
+ * @property int $updatedAt
+ * @property int $lastLoginAt
+ * @property int $gdprConsentDate date of agreement of data processing
+ * @property string $lastLoginIp
+ * @property int $passwordChangedAt
+ * @property int $passwordAge
  * Defined relations:
  * @property SocialNetworkAccount[] $socialNetworkAccounts
  * @property Profile $profile
@@ -120,16 +120,16 @@ class User extends ActiveRecord
         $security = $this->make(SecurityHelper::class);
         if ($insert) {
             if (Yii::$app instanceof Application) {
-                $this->setAttribute('registratioIp', Yii::$app->request->getUserIP());
+                $this->setAttribute('registrationIp', Yii::$app->request->getUserIP());
             }
         }
 
         if (!empty($this->password)) {
             $this->setAttribute(
-                'passworHash',
+                'passwordHash',
                 $security->generatePasswordHash($this->password, $this->getModule()->blowfishCost)
             );
-            $this->passworChangeAt = time();
+            $this->passwordChangedAt = time();
         }
 
         return parent::beforeSave($insert);
@@ -162,7 +162,7 @@ class User extends ActiveRecord
         if ($this->module->enableGdprCompliance) {
             $behaviors['GDPR'] = [
                 'class' => TimestampBehavior::class,
-                'createdAtAttribute' => 'gdpr_consent_date',
+                'createdAtAttribute' => 'gdprConsentDate',
                 'updatedAtAttribute' => false
             ];
         }
@@ -177,15 +177,15 @@ class User extends ActiveRecord
     {
         return [
             'email' => Yii::t('usuario', 'Email'),
-            'registration_ip' => Yii::t('usuario', 'Registration IP'),
-            'unconfirmed_email' => Yii::t('usuario', 'New email'),
+            'registrationIp' => Yii::t('usuario', 'Registration IP'),
+            'unconfirmedEmail' => Yii::t('usuario', 'New email'),
             'password' => Yii::t('usuario', 'Password'),
-            'created_at' => Yii::t('usuario', 'Registration time'),
-            'confirmed_at' => Yii::t('usuario', 'Confirmation time'),
-            'last_login_at' => Yii::t('usuario', 'Last login time'),
-            'last_login_ip' => Yii::t('usuario', 'Last login IP'),
-            'password_changed_at' => Yii::t('usuario', 'Last password change'),
-            'password_age' => Yii::t('usuario', 'Password age'),
+            'createdAt' => Yii::t('usuario', 'Registration time'),
+            'confirmedAt' => Yii::t('usuario', 'Confirmation time'),
+            'lastLoginAt' => Yii::t('usuario', 'Last login time'),
+            'lastLoginIp' => Yii::t('usuario', 'Last login IP'),
+            'passwordChangedAt' => Yii::t('usuario', 'Last password change'),
+            'passwordAge' => Yii::t('usuario', 'Password age'),
         ];
     }
 
@@ -251,7 +251,7 @@ class User extends ActiveRecord
      */
     public function getIsBlocked()
     {
-        return $this->blocked_at !== null;
+        return $this->blockedAt !== null;
     }
 
 
@@ -261,7 +261,7 @@ class User extends ActiveRecord
      */
     public function getIsConfirmed()
     {
-        return $this->confirmed_at !== null;
+        return $this->confirmedAt !== null;
     }
 
     /**

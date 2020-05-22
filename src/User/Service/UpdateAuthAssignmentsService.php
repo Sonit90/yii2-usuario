@@ -40,11 +40,11 @@ class UpdateAuthAssignmentsService implements ServiceInterface
         $assignedItemsNames = array_keys($assignedItems);
 
         foreach (array_diff($assignedItemsNames, $this->model->items) as $item) {
-            $this->model->getAuthManager()->revoke($assignedItems[$item], $this->model->user_id);
+            $this->model->getAuthManager()->revoke($assignedItems[$item], $this->model->userId);
         }
 
         foreach (array_diff($this->model->items, $assignedItemsNames) as $item) {
-            $this->getAuthManager()->assign($this->getAuthManager()->getItem($item), $this->model->user_id);
+            $this->getAuthManager()->assign($this->getAuthManager()->getItem($item), $this->model->userId);
         }
 
         return $this->model->updated = true;

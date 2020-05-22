@@ -80,7 +80,7 @@ class EmailChangeService implements ServiceInterface
                 || $this->getModule()->emailChangeStrategy === MailChangeStrategyInterface::TYPE_DEFAULT
             ) {
                 $this->model->email = $this->model->unconfirmeEmail;
-                $this->model->unconfirmed_email = null;
+                $this->model->unconfirmedEmail = null;
                 Yii::$app->session->setFlash('success', Yii::t('usuario', 'Your email address has been changed'));
             }
 

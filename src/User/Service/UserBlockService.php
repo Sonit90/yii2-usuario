@@ -40,12 +40,12 @@ class UserBlockService implements ServiceInterface
     {
         if ($this->model->getIsBlocked()) {
             $this->triggerEvents(UserEvent::EVENT_BEFORE_UNBLOCK);
-            $result = (bool)$this->model->updateAttributes(['blocked_at' => null]);
+            $result = (bool)$this->model->updateAttributes(['blockedAt' => null]);
             $this->triggerEvents(UserEvent::EVENT_AFTER_UNBLOCK);
         } else {
             $this->triggerEvents(UserEvent::EVENT_BEFORE_BLOCK);
             $result = (bool)$this->model->updateAttributes(
-                ['blocked_at' => time()]
+                ['blockedAt' => time()]
             );
             $this->triggerEvents(UserEvent::EVENT_AFTER_BLOCK);
         }
