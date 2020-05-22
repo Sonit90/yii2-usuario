@@ -56,7 +56,7 @@ class RuleSearch extends Rule
     public function search(array $params = [])
     {
         $query = (new Query())
-            ->select(['name', 'data', 'createAt', 'updated_at'])
+            ->select(['name', 'data', 'createAt', 'updateAt'])
             ->from($this->getAuthManager()->ruleTable)
             ->orderBy(['name' => SORT_ASC]);
 
@@ -75,7 +75,7 @@ class RuleSearch extends Rule
                 'query' => $query,
                 'db' => $this->getAuthManager()->db,
                 'sort' => [
-                    'attributes' => ['name', 'created_at', 'updated_at']
+                    'attributes' => ['name', 'createAt', 'updateAt']
                 ]
             ]
         );

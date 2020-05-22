@@ -31,7 +31,7 @@ use yii\helpers\Url;
  * @property string $code
  * @property string $email
  * @property string $username
- * @property int $created_at
+ * @property int $createAt
  * @property User $user        User that this account is connected for
  */
 class SocialNetworkAccount extends ActiveRecord
@@ -49,7 +49,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%social_account}}';
+        return '{{%sociaAccount}}';
     }
 
     /**
@@ -57,7 +57,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function getIsConnected()
     {
-        return null !== $this->user_id;
+        return null !== $this->useId;
     }
 
     /**
@@ -99,7 +99,7 @@ class SocialNetworkAccount extends ActiveRecord
                 'username' => null,
                 'email' => null,
                 'code' => null,
-                'user_id' => $user->id,
+                'useId' => $user->id,
             ]
         );
     }
@@ -109,7 +109,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'user_id']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
     }
 
     /**

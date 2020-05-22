@@ -32,25 +32,25 @@ use yii\web\Application;
  * @property bool $isBlocked
  * @property bool $isConfirmed      whether user account has been confirmed or not
  * @property bool $gdpDeleted     whether user requested deletion of his account
- * @property bool $gdpr_consent     whether user has consent personal data processing
+ * @property bool $gdpConsent     whether user has consent personal data processing
  *
  * Database fields:
  * @property int $id
  * @property string $email
- * @property string $unconfirmed_email
- * @property string $password_hash
+ * @property string $unconfirmeEmail
+ * @property string $passworHash
  * @property string $authTfKey
  * @property int $authTfEnabled
- * @property string $registration_ip
- * @property int $confirmed_at
- * @property int $blocked_at
- * @property int $created_at
- * @property int $updated_at
- * @property int $last_login_at
- * @property int $gdpr_consent_date date of agreement of data processing
- * @property string $last_login_ip
- * @property int $password_changed_at
- * @property int $password_age
+ * @property string $registratioIp
+ * @property int $confirmeAt
+ * @property int $blockeAt
+ * @property int $createAt
+ * @property int $updateAt
+ * @property int $lasLogiAt
+ * @property int $gdpConsenDate date of agreement of data processing
+ * @property string $lasLogiIp
+ * @property int $passworChangeAt
+ * @property int $passworAge
  * Defined relations:
  * @property SocialNetworkAccount[] $socialNetworkAccounts
  * @property Profile $profile
@@ -120,16 +120,16 @@ class User extends ActiveRecord
         $security = $this->make(SecurityHelper::class);
         if ($insert) {
             if (Yii::$app instanceof Application) {
-                $this->setAttribute('registration_ip', Yii::$app->request->getUserIP());
+                $this->setAttribute('registratioIp', Yii::$app->request->getUserIP());
             }
         }
 
         if (!empty($this->password)) {
             $this->setAttribute(
-                'password_hash',
+                'passworHash',
                 $security->generatePasswordHash($this->password, $this->getModule()->blowfishCost)
             );
-            $this->password_changed_at = time();
+            $this->passworChangeAt = time();
         }
 
         return parent::beforeSave($insert);

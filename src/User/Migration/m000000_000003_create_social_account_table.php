@@ -34,7 +34,7 @@ class m000000_000003_create_social_account_table extends Migration
         );
 
         $this->createIndex(
-            'idxSocialAccountProviderClient_id',
+            'idxSocialAccountProviderClienId',
             '{{%socialAccount}}',
             ['provider', 'clientId'],
             true

@@ -24,12 +24,12 @@ use yii\helpers\Url;
 /**
  * Token Active Record model.
  *
- * @property int $user_id
+ * @property int $useId
  * @property string $code
  * @property int $type
  * @property string $url
  * @property bool $isExpired
- * @property int $created_at
+ * @property int $createAt
  * @property User $user
  */
 class Token extends ActiveRecord
@@ -59,8 +59,8 @@ class Token extends ActiveRecord
     {
         if ($insert) {
             $this->setAttribute('code', $this->make(SecurityHelper::class)->generateRandomString());
-            static::deleteAll(['user_id' => $this->user_id, 'type' => $this->type]);
-            $this->setAttribute('created_at', time());
+            static::deleteAll(['useId' => $this->useId, 'type' => $this->type]);
+            $this->setAttribute('createAt', time());
         }
 
         return parent::beforeSave($insert);
@@ -79,7 +79,7 @@ class Token extends ActiveRecord
      */
     public static function primaryKey()
     {
-        return ['user_id', 'code', 'type'];
+        return ['useId', 'code', 'type'];
     }
 
     /**
@@ -87,7 +87,7 @@ class Token extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'user_id']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
     }
 
     /**
@@ -96,7 +96,7 @@ class Token extends ActiveRecord
      */
     public function getUrl()
     {
-        return Url::to([$this->routes[$this->type], 'id' => $this->user_id, 'code' => $this->code], true);
+        return Url::to([$this->routes[$this->type], 'id' => $this->useId, 'code' => $this->code], true);
     }
 
     /**
@@ -113,7 +113,7 @@ class Token extends ActiveRecord
             throw new RuntimeException('Unknown Token type.');
         }
 
-        return ($this->created_at + $expirationTime) < time();
+        return ($this->createAt + $expirationTime) < time();
     }
 
     /**

@@ -25,9 +25,9 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * @property int $user_id
+ * @property int $useId
  * @property string $name
- * @property string $public_email
+ * @property string $publiEmail
  * @property string $location
  * @property string $website
  * @property string $bio
@@ -65,10 +65,10 @@ class Profile extends ActiveRecord
                     }
                 },
             ],
-            'publicEmailPattern' => ['public_email', 'email'],
+            'publicEmailPattern' => ['publiEmail', 'email'],
             'websiteUrl' => ['website', 'url'],
             'nameLength' => ['name', 'string', 'max' => 255],
-            'publicEmailLength' => ['public_email', 'string', 'max' => 255],
+            'publicEmailLength' => ['publiEmail', 'string', 'max' => 255],
             'locationLength' => ['location', 'string', 'max' => 255],
             'websiteLength' => ['website', 'string', 'max' => 255],
         ];
@@ -81,7 +81,7 @@ class Profile extends ActiveRecord
     {
         return [
             'name' => Yii::t('usuario', 'Name'),
-            'public_email' => Yii::t('usuario', 'Email (public)'),
+            'publiEmail' => Yii::t('usuario', 'Email (public)'),
             'location' => Yii::t('usuario', 'Location'),
             'website' => Yii::t('usuario', 'Website'),
             'bio' => Yii::t('usuario', 'Bio'),
@@ -133,7 +133,7 @@ class Profile extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'user_id']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
     }
 
 
