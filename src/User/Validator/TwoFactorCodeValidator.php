@@ -44,6 +44,6 @@ class TwoFactorCodeValidator implements ValidatorInterface
     public function validate()
     {
         $manager = new Manager();
-        return $manager->setCycles($this->cycles)->verify($this->code, $this->user->auth_tf_key);
+        return $manager->setCycles($this->cycles)->verify($this->code, $this->user->authTfKey);
     }
 }

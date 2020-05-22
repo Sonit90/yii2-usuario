@@ -39,7 +39,7 @@ use yii\web\Application;
  * @property string $email
  * @property string $unconfirmed_email
  * @property string $password_hash
- * @property string $auth_tf_key
+ * @property string $authTfKey
  * @property int $auth_tf_enabled
  * @property string $registration_ip
  * @property int $confirmed_at
@@ -229,8 +229,8 @@ class User extends ActiveRecord
             'passwordLength' => ['password', 'string', 'min' => 6, 'max' => 72, 'on' => ['register', 'create']],
 
             // two factor auth rules
-            'twoFactorSecretTrim' => ['auth_tf_key', 'trim'],
-            'twoFactorSecretLength' => ['auth_tf_key', 'string', 'max' => 16],
+            'twoFactorSecretTrim' => ['authTfKey', 'trim'],
+            'twoFactorSecretLength' => ['authTfKey', 'string', 'max' => 16],
             'twoFactorEnabledNumber' => ['auth_tf_enabled', 'boolean']
         ];
     }

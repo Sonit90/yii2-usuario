@@ -41,12 +41,12 @@ class TwoFactorQrCodeUriGeneratorService implements ServiceInterface
     public function run()
     {
         $user = $this->user;
-        if (!$user->auth_tf_key) {
-            $user->auth_tf_key = (new Manager())->generateSecretKey();
-            $user->updateAttributes(['auth_tf_key']);
+        if (!$user->authTfKey) {
+            $user->authTfKey = (new Manager())->generateSecretKey();
+            $user->updateAttributes(['authTfKey']);
         }
 
-        $totpUri = (new TOTPSecretKeyUriGeneratorService(Yii::$app->name, $user->email, $user->auth_tf_key))->run();
+        $totpUri = (new TOTPSecretKeyUriGeneratorService(Yii::$app->name, $user->email, $user->authTfKey))->run();
 
         return (new QrCodeDataUriGeneratorService($totpUri))->run();
     }
