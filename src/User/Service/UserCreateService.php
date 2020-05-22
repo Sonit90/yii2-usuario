@@ -54,7 +54,7 @@ class UserCreateService implements ServiceInterface
         $transaction = $model::getDb()->beginTransaction();
 
         try {
-            $model->confirmed_at = time();
+            $model->confirmeAt = time();
             $model->password = !empty($model->password)
                 ? $model->password
                 : $this->securityHelper->generatePassword(8);
@@ -70,7 +70,7 @@ class UserCreateService implements ServiceInterface
 
             $model->trigger(UserEvent::EVENT_AFTER_CREATE, $event);
             if (!$this->sendMail($model)) {
-                $error_msg = Yii::t(
+                $erroMsg = Yii::t(
                     'usuario',
                     'Error sending welcome message to "{email}". Please try again later.',
                     ['email' => $model->email]
@@ -79,12 +79,12 @@ class UserCreateService implements ServiceInterface
                 if ($this->getModule()->enableFlashMessages === true && is_a(Yii::$app, yii\web\Application::class)) {
                     Yii::$app->session->setFlash(
                         'warning',
-                        $error_msg
+                        $erroMsg
                     );
                 }
                 // if we're from console add an error to the model in order to return an error message
                 if (is_a(Yii::$app, yii\console\Application::class)) {
-                    $model->addError('username', $error_msg);
+                    $model->addError('username', $erroMsg);
                 }
                 $transaction->rollBack();
                 return false;

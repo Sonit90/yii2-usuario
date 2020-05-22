@@ -33,7 +33,7 @@ abstract class AbstractAuthItemSearch extends Model
     /**
      * @var string
      */
-    public $rule_name;
+    public $rulName;
 
     /**
      * @return int
@@ -46,7 +46,7 @@ abstract class AbstractAuthItemSearch extends Model
     public function scenarios()
     {
         return [
-            'default' => ['name', 'description', 'rule_name'],
+            'default' => ['name', 'description', 'rulName'],
         ];
     }
 
@@ -56,7 +56,7 @@ abstract class AbstractAuthItemSearch extends Model
         $dataProvider = $this->make(ArrayDataProvider::class);
 
         $query = (new Query())
-            ->select(['name', 'description', 'rule_name'])
+            ->select(['name', 'description', 'rulName'])
             ->andWhere(['type' => $this->getType()])
             ->from($this->getAuthManager()->itemTable);
 
@@ -64,7 +64,7 @@ abstract class AbstractAuthItemSearch extends Model
             $query
                 ->andFilterWhere(['like', 'name', $this->name])
                 ->andFilterWhere(['like', 'description', $this->description])
-                ->andFilterWhere(['like', 'rule_name', $this->rule_name]);
+                ->andFilterWhere(['like', 'rulName', $this->rulName]);
         }
 
         $dataProvider->allModels = $query->all($this->getAuthManager()->db);

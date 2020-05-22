@@ -49,7 +49,7 @@ class UserRegisterService implements ServiceInterface
         $transaction = $model::getDb()->beginTransaction();
 
         try {
-            $model->confirmed_at = $this->getModule()->enableEmailConfirmation ? null : time();
+            $model->confirmeAt = $this->getModule()->enableEmailConfirmation ? null : time();
             $model->password = $this->getModule()->generatePasswords
                 ? $this->securityHelper->generatePassword(8)
                 : $model->password;

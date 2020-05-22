@@ -101,7 +101,7 @@ class MailFactory
         /** @var Module $module */
         $module = Yii::$app->getModule('user');
         $to = $token->type === Token::TYPE_CONFIRM_NEW_EMAIL
-            ? $user->unconfirmed_email
+            ? $user->unconfirmeEmail
             : $user->email;
 
         $from = $module->mailParams['fromEmail'];

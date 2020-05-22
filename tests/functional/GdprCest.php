@@ -78,8 +78,8 @@ class GdprCest
         if ($password !== null) {
             $I->fillField('#registrationform-password', $password);
         }
-        if ($gdpr_consent)
-            $I->checkOption('#registrationform-gdpr_consent');
+        if ($gdpConsent)
+            $I->checkOption('#registrationform-gdpConsent');
 
         $I->click('Sign up');
 
@@ -98,7 +98,7 @@ class GdprCest
         $this->register($I, 'tester@example.com', 'tester', 'tester');
         $I->see('Your account has been created and a message with further instructions has been sent to your email');
         $user = $I->grabRecord(User::className(), ['email' => 'tester@example.com']);
-        $token = $I->grabRecord(Token::className(), ['user_id' => $user->id, 'type' => Token::TYPE_CONFIRMATION]);
+        $token = $I->grabRecord(Token::className(), ['useId' => $user->id, 'type' => Token::TYPE_CONFIRMATION]);
         /** @var yii\swiftmailer\Message $message */
         $message = $I->grabLastSentEmail();
         $I->assertArrayHasKey($user->email, $message->getTo());

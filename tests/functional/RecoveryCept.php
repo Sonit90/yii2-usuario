@@ -37,7 +37,7 @@ $I->click('Continue');
 
 $I->see('An email with instructions to create a new password has been sent to ' . $user->email);
 $user = $I->grabRecord(User::className(), ['email' => $user->email]);
-$token = $I->grabRecord(Token::className(), ['user_id' => $user->id, 'type' => Token::TYPE_RECOVERY]);
+$token = $I->grabRecord(Token::className(), ['useId' => $user->id, 'type' => Token::TYPE_RECOVERY]);
 /** @var yii\swiftmailer\Message $message */
 $message = $I->grabLastSentEmail();
 $I->assertArrayHasKey($user->email, $message->getTo());
@@ -47,14 +47,14 @@ $I->assertContains(
 );
 
 $I->amGoingTo('reset password with invalid token');
-$user = $I->grabFixture('user', 'user_with_expired_recovery_token');
-$token = $I->grabRecord(Token::className(), ['user_id' => $user->id, 'type' => Token::TYPE_RECOVERY]);
+$user = $I->grabFixture('user', 'useWitExpireRecoverToken');
+$token = $I->grabRecord(Token::className(), ['useId' => $user->id, 'type' => Token::TYPE_RECOVERY]);
 $I->amOnRoute('/user/recovery/reset', ['id' => $user->id, 'code' => $token->code]);
 $I->see('Recovery link is invalid or expired. Please try requesting a new one.');
 
 $I->amGoingTo('reset password');
-$user = $I->grabFixture('user', 'user_with_recovery_token');
-$token = $I->grabRecord(Token::className(), ['user_id' => $user->id, 'type' => Token::TYPE_RECOVERY]);
+$user = $I->grabFixture('user', 'useWitRecoverToken');
+$token = $I->grabRecord(Token::className(), ['useId' => $user->id, 'type' => Token::TYPE_RECOVERY]);
 $I->amOnRoute('/user/recovery/reset', ['id' => $user->id, 'code' => $token->code]);
 $I->fillField('#recoveryform-password', 'newpassword');
 $I->click('Finish');

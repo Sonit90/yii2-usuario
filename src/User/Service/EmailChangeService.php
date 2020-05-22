@@ -52,9 +52,9 @@ class EmailChangeService implements ServiceInterface
             return false;
         }
         $token->delete();
-        if (empty($this->model->unconfirmed_email)) {
+        if (empty($this->model->unconfirmeEmail)) {
             Yii::$app->session->setFlash('danger', Yii::t('usuario', 'An error occurred processing your request'));
-        } elseif ($this->userQuery->whereEmail($this->model->unconfirmed_email)->exists() === false) {
+        } elseif ($this->userQuery->whereEmail($this->model->unconfirmeEmail)->exists() === false) {
             if ($this->getModule()->emailChangeStrategy === MailChangeStrategyInterface::TYPE_SECURE) {
                 if ($token->type === Token::TYPE_CONFIRM_NEW_EMAIL) {
                     $this->model->flags |= User::NEW_EMAIL_CONFIRMED;
@@ -79,7 +79,7 @@ class EmailChangeService implements ServiceInterface
             if ((($this->model->flags & User::NEW_EMAIL_CONFIRMED) && ($this->model->flags & User::OLD_EMAIL_CONFIRMED))
                 || $this->getModule()->emailChangeStrategy === MailChangeStrategyInterface::TYPE_DEFAULT
             ) {
-                $this->model->email = $this->model->unconfirmed_email;
+                $this->model->email = $this->model->unconfirmeEmail;
                 $this->model->unconfirmed_email = null;
                 Yii::$app->session->setFlash('success', Yii::t('usuario', 'Your email address has been changed'));
             }

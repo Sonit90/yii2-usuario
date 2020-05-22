@@ -9,7 +9,6 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Da\User\Migration;
 
 use Da\User\Helper\MigrationHelper;
 use yii\db\Migration;
@@ -21,24 +20,24 @@ class m000000_000002_create_profile_table extends Migration
         $this->createTable(
             '{{%profile}}',
             [
-                'user_id' => $this->integer()->notNull(),
-                'name' => $this->string(255),
-                'public_email' => $this->string(255),
-                'gravatar_email' => $this->string(255),
-                'gravatar_id' => $this->string(32),
+                'userId' => $this->integer()->notNull(),
+                'firstName' => $this->string(255),
+                'lastName' => $this->string(255),
+                'phone' => $this->string(15),
+                'avatar' => $this->string(255),
+                'publicEmail' => $this->string(255),
                 'location' => $this->string(255),
-                'website' => $this->string(255),
                 'timezone' => $this->string(40),
                 'bio' => $this->text(),
             ],
             MigrationHelper::resolveTableOptions($this->db->driverName)
         );
 
-        $this->addPrimaryKey('{{%profile_pk}}', '{{%profile}}', 'user_id');
+        $this->addPrimaryKey('{{%profilePk}}', '{{%profile}}', 'userId');
 
         $restrict = MigrationHelper::isMicrosoftSQLServer($this->db->driverName) ? 'NO ACTION' : 'RESTRICT';
 
-        $this->addForeignKey('fk_profile_user', '{{%profile}}', 'user_id', '{{%user}}', 'id', 'CASCADE', $restrict);
+        $this->addForeignKey('fkProfileUser', '{{%profile}}', 'userId', '{{%user}}', 'id', 'CASCADE', $restrict);
     }
 
     public function safeDown()

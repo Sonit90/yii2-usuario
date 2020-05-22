@@ -30,19 +30,19 @@ class UserSearch extends Model
     /**
      * @var int
      */
-    public $created_at;
+    public $createAt;
     /**
      * @var int
      */
-    public $last_login_at;
+    public $lasLogiAt;
     /**
      * @var string
      */
-    public $registration_ip;
+    public $registratioIp;
     /**
      * @var string
      */
-    public $last_login_ip;
+    public $lasLogiIp;
     /**
      * @var UserQuery
      */
@@ -66,8 +66,8 @@ class UserSearch extends Model
     public function rules()
     {
         return [
-            'safeFields' => [['username', 'email', 'registration_ip', 'created_at', 'last_login_at, last_login_ip'], 'safe'],
-            'createdDefault' => [['created_at', 'last_login_at'], 'default', 'value' => null],
+            'safeFields' => [['username', 'email', 'registratioIp', 'createAt', 'lasLogiAt, lasLogiIp'], 'safe'],
+            'createdDefault' => [['createAt', 'lasLogiAt'], 'default', 'value' => null],
         ];
     }
 
@@ -79,10 +79,10 @@ class UserSearch extends Model
         return [
             'username' => Yii::t('usuario', 'Username'),
             'email' => Yii::t('usuario', 'Email'),
-            'created_at' => Yii::t('usuario', 'Registration time'),
-            'registration_ip' => Yii::t('usuario', 'Registration IP'),
-            'last_login_at' => Yii::t('usuario', 'Last login time'),
-            'last_login_ip' => Yii::t('usuario', 'Last login IP'),
+            'createAt' => Yii::t('usuario', 'Registration time'),
+            'registratioIp' => Yii::t('usuario', 'Registration IP'),
+            'lasLogiAt' => Yii::t('usuario', 'Last login time'),
+            'lasLogiIp' => Yii::t('usuario', 'Last login IP'),
         ];
     }
 
@@ -106,13 +106,13 @@ class UserSearch extends Model
             return $dataProvider;
         }
 
-        if ($this->created_at !== null) {
-            $date = strtotime($this->created_at);
-            $query->andFilterWhere(['between', 'created_at', $date, $date + 3600 * 24]);
+        if ($this->createAt !== null) {
+            $date = strtotime($this->createAt);
+            $query->andFilterWhere(['between', 'createAt', $date, $date + 3600 * 24]);
         }
 
-        if ($this->last_login_at !== null) {
-            $date = strtotime($this->last_login_at);
+        if ($this->lasLogiAt !== null) {
+            $date = strtotime($this->lasLogiAt);
             $query->andFilterWhere(['between', 'last_login_at', $date, $date + 3600 * 24]);
         }
 

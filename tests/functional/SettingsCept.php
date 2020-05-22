@@ -31,14 +31,14 @@ $I->fillField('#settingsform-email', 'new_user@example.com');
 $I->fillField('#settingsform-username', $user->username);
 $I->fillField('#settingsform-current_password', 'qwerty');
 $I->click('Save');
-$I->seeRecord(User::className(), ['email' => $user->email, 'unconfirmed_email' => 'new_user@example.com']);
+$I->seeRecord(User::className(), ['email' => $user->email, 'unconfirmeEmail' => 'neUser@example.com']);
 
 $I->see('A confirmation message has been sent to your new email address');
 $user = $I->grabRecord(User::className(), ['id' => $user->id]);
-$token = $I->grabRecord(Token::className(), ['user_id' => $user->id, 'type' => Token::TYPE_CONFIRM_NEW_EMAIL]);
+$token = $I->grabRecord(Token::className(), ['useId' => $user->id, 'type' => Token::TYPE_CONFIRM_NEW_EMAIL]);
 /** @var yii\swiftmailer\Message $message */
 $message = $I->grabLastSentEmail();
-$I->assertArrayHasKey($user->unconfirmed_email, $message->getTo());
+$I->assertArrayHasKey($user->unconfirmeEmail, $message->getTo());
 $I->assertContains(Html::encode($token->getUrl()), utf8_encode(quoted_printable_decode($message->getSwiftMessage()->toString())));
 Yii::$app->user->logout();
 

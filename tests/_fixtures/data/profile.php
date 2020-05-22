@@ -4,7 +4,7 @@ $time = time();
 
 return [
     'user' => [
-        'user_id' => 1,
+        'useId' => 1,
         'name' => 'John Doe',
     ],
 ];

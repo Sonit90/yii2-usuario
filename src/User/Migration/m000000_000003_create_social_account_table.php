@@ -9,7 +9,6 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Da\User\Migration;
 
 use Da\User\Helper\MigrationHelper;
 use yii\db\Migration;
@@ -19,34 +18,34 @@ class m000000_000003_create_social_account_table extends Migration
     public function safeUp()
     {
         $this->createTable(
-            '{{%social_account}}',
+            '{{%socialAccount}}',
             [
                 'id' => $this->primaryKey(),
-                'user_id' => $this->integer(),
+                'userId' => $this->integer(),
                 'provider' => $this->string(255)->notNull(),
-                'client_id' => $this->string(255)->notNull(),
+                'clientId' => $this->string(255)->notNull(),
                 'code' => $this->string(32),
                 'email' => $this->string(255),
                 'username' => $this->string(255),
                 'data' => $this->text(),
-                'created_at' => $this->integer(),
+                'createdAt' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             ],
             MigrationHelper::resolveTableOptions($this->db->driverName)
         );
 
         $this->createIndex(
-            'idx_social_account_provider_client_id',
-            '{{%social_account}}',
-            ['provider', 'client_id'],
+            'idxSocialAccountProviderClient_id',
+            '{{%socialAccount}}',
+            ['provider', 'clientId'],
             true
         );
 
-        $this->createIndex('idx_social_account_code', '{{%social_account}}', 'code', true);
+        $this->createIndex('idxSocialAccountCode', '{{%socialAccount}}', 'code', true);
 
         $this->addForeignKey(
-            'fk_social_account_user',
-            '{{%social_account}}',
-            'user_id',
+            'fkSocialAccountUser',
+            '{{%socialAccount}}',
+            'userId',
             '{{%user}}',
             'id',
             'CASCADE',
@@ -56,6 +55,6 @@ class m000000_000003_create_social_account_table extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%social_account}}');
+        $this->dropTable('{{%socialAccount}}');
     }
 }

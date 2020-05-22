@@ -9,7 +9,6 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Da\User\Migration;
 
 use Da\User\Helper\MigrationHelper;
 use yii\db\Migration;
@@ -22,23 +21,26 @@ class m000000_000001_create_user_table extends Migration
             '{{%user}}',
             [
                 'id' => $this->primaryKey(),
-                'username' => $this->string(255)->notNull(),
                 'email' => $this->string(255)->notNull(),
-                'password_hash' => $this->string(60)->notNull(),
-                'auth_key' => $this->string(32)->notNull(),
-                'unconfirmed_email' => $this->string(255),
-                'registration_ip' => $this->string(45),
-                'flags' => $this->integer()->notNull()->defaultValue('0'),
-                'confirmed_at' => $this->integer(),
-                'blocked_at' => $this->integer(),
-                'updated_at' => $this->integer()->notNull(),
-                'created_at' => $this->integer()->notNull(),
+                'passwordHash' => $this->string(60)->notNull(),
+                'passwordChangedAt' => $this->integer()->null(),
+                'unconfirmedEmail' => $this->string(255),
+                'registrationIp' => $this->string(45),
+                'confirmedAt' => $this->integer()->null(),
+                'blockedAt' => $this->integer()->null(),
+                'updatedAt' => $this->integer(),
+                'createdAt' => $this->integer(),
+                'deletedAt' => $this->integer()->null(),
+                'lastLoginAt' => $this->integer()->null(),
+                'lastLoginIp' => $this->string(45)->null(),
+                'authTfKey' => $this->string(16),
+                'authTfEnabled' => $this->boolean()->defaultValue(false),
+
             ],
             MigrationHelper::resolveTableOptions($this->db->driverName)
         );
 
-        $this->createIndex('idx_user_username', '{{%user}}', 'username', true);
-        $this->createIndex('idx_user_email', '{{%user}}', 'email', true);
+        $this->createIndex('idxUserEmail', '{{%user}}', 'email', true);
     }
 
     public function safeDown()
