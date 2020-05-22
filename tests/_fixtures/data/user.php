@@ -13,7 +13,7 @@ return [
         'autTEnabled' => false,
         'createAt' => $time,
         'updateAt' => $time,
-        'confirmeAt' => $time,
+        'confirmedAt' => $time,
     ],
     'unconfirmed' => [
         'id' => 2,

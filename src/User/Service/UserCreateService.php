@@ -54,7 +54,7 @@ class UserCreateService implements ServiceInterface
         $transaction = $model::getDb()->beginTransaction();
 
         try {
-            $model->confirmeAt = time();
+            $model->confirmedAt = time();
             $model->password = !empty($model->password)
                 ? $model->password
                 : $this->securityHelper->generatePassword(8);
