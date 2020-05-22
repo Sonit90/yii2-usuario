@@ -17,11 +17,11 @@ class ProfileQuery extends ActiveQuery
 {
     /**
      * Search by user id
-     * @param  mixed       $user_id
+     * @param  mixed       $useId
      * @return ActiveQuery
      */
-    public function whereUserId($user_id)
+    public function whereUserId($useId)
     {
-        return $this->andWhere(['user_id' => $user_id]);
+        return $this->andWhere(['useId' => $useId]);
     }
 }

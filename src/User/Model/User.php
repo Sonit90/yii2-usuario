@@ -31,7 +31,7 @@ use yii\web\Application;
  * @property bool $isAdmin
  * @property bool $isBlocked
  * @property bool $isConfirmed      whether user account has been confirmed or not
- * @property bool $gdpr_deleted     whether user requested deletion of his account
+ * @property bool $gdpDeleted     whether user requested deletion of his account
  * @property bool $gdpr_consent     whether user has consent personal data processing
  *
  * Database fields:
@@ -40,7 +40,7 @@ use yii\web\Application;
  * @property string $unconfirmed_email
  * @property string $password_hash
  * @property string $authTfKey
- * @property int $auth_tf_enabled
+ * @property int $authTfEnabled
  * @property string $registration_ip
  * @property int $confirmed_at
  * @property int $blocked_at
@@ -231,7 +231,7 @@ class User extends ActiveRecord
             // two factor auth rules
             'twoFactorSecretTrim' => ['authTfKey', 'trim'],
             'twoFactorSecretLength' => ['authTfKey', 'string', 'max' => 16],
-            'twoFactorEnabledNumber' => ['auth_tf_enabled', 'boolean']
+            'twoFactorEnabledNumber' => ['authTfEnabled', 'boolean']
         ];
     }
 

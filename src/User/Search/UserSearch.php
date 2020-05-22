@@ -113,14 +113,14 @@ class UserSearch extends Model
 
         if ($this->lasLogiAt !== null) {
             $date = strtotime($this->lasLogiAt);
-            $query->andFilterWhere(['between', 'last_login_at', $date, $date + 3600 * 24]);
+            $query->andFilterWhere(['between', 'lasLogiAt', $date, $date + 3600 * 24]);
         }
 
         $query
             ->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['registration_ip' => $this->registration_ip])
-            ->andFilterWhere(['last_login_ip' => $this->last_login_ip]);
+            ->andFilterWhere(['registratioIp' => $this->registratioIp])
+            ->andFilterWhere(['lasLogiIp' => $this->lasLogiIp]);
 
         return $dataProvider;
     }

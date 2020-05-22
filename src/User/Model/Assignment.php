@@ -22,7 +22,7 @@ class Assignment extends Model
     use AuthManagerAwareTrait;
 
     public $items = [];
-    public $user_id;
+    public $useId;
     public $updated = false;
 
     /**
@@ -34,11 +34,11 @@ class Assignment extends Model
     {
         parent::init();
 
-        if ($this->user_id === null) {
-            throw new InvalidConfigException('"user_id" must be set.');
+        if ($this->useId === null) {
+            throw new InvalidConfigException('"useId" must be set.');
         }
 
-        $this->items = array_keys($this->getAuthManager()->getItemsByUser($this->user_id));
+        $this->items = array_keys($this->getAuthManager()->getItemsByUser($this->useId));
     }
 
     /**
@@ -57,9 +57,9 @@ class Assignment extends Model
     public function rules()
     {
         return [
-            ['user_id', 'required'],
+            ['useId', 'required'],
             ['items', RbacItemsValidator::class],
-            ['user_id', 'integer'],
+            ['useId', 'integer'],
         ];
     }
 }

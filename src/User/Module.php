@@ -45,7 +45,7 @@ class Module extends BaseModule
     public $gdprExportProperties = [
         'email',
         'username',
-        'profile.public_email',
+        'profile.publiEmail',
         'profile.name',
         'profile.location',
         'profile.website',
@@ -175,7 +175,7 @@ class Module extends BaseModule
     /**
      * @var string the session key name to impersonate users. Please, modify it for security reasons!
      */
-    public $switchIdentitySessionKey = 'yuik_usuario';
+    public $switchIdentitySessionKey = 'yuiUsuario';
     /**
      * @var integer If != NULL sets a max password age in days
      */

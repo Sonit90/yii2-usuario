@@ -23,7 +23,7 @@ class TokenQuery extends ActiveQuery
      */
     public function whereUserId($userId)
     {
-        return $this->andWhere(['user_id' => $userId]);
+        return $this->andWhere(['useId' => $userId]);
     }
 
     /**

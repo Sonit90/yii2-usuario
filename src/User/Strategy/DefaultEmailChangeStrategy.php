@@ -31,7 +31,7 @@ class DefaultEmailChangeStrategy implements MailChangeStrategyInterface
 
     public function run()
     {
-        $this->form->getUser()->unconfirmed_email = $this->form->email;
+        $this->form->getUser()->unconfirmeEmail = $this->form->email;
 
         $token = TokenFactory::makeConfirmNewMailToken($this->form->getUser()->id);
 

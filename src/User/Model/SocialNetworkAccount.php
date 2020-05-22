@@ -23,9 +23,9 @@ use yii\helpers\Url;
 /**
  * /**
  * @property int $id          Id
- * @property int $user_id     User id, null if account is not bind to user
+ * @property int $useId     User id, null if account is not bind to user
  * @property string $provider     Name of service
- * @property string $client_id    Account id
+ * @property string $clienId    Account id
  * @property string $data         Account properties returned by social network (json encoded)
  * @property string $decodedData  Json-decoded properties
  * @property string $code

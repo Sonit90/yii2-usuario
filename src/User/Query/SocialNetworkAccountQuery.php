@@ -26,7 +26,7 @@ class SocialNetworkAccountQuery extends ActiveQuery
         return $this->andWhere(
             [
                 'provider' => $client->getId(),
-                'client_id' => (string)$client->getUserAttributes()['id'],
+                'clienId' => (string)$client->getUserAttributes()['id'],
             ]
         );
     }

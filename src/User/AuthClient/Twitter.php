@@ -21,8 +21,8 @@ class Twitter extends BaseTwitter implements AuthClientInterface
      */
     public function getUsername()
     {
-        return isset($this->getUserAttributes()['screen_name'])
-            ? $this->getUserAttributes()['screen_name']
+        return isset($this->getUserAttributes()['screeName'])
+            ? $this->getUserAttributes()['screeName']
             : null;
     }
 
