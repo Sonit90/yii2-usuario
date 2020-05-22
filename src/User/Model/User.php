@@ -156,9 +156,10 @@ class User extends ActiveRecord
     public function behaviors()
     {
         $behaviors = [
-            'class' => TimestampBehavior::className(),
+            ['class' => TimestampBehavior::class,
             'createdAtAttribute' => 'createdAt',
-            'updatedAtAttribute' => 'updatedAt',
+            'updatedAtAttribute' => 'updatedAt'
+            ]
         ];
 
         if ($this->module->enableGdprCompliance) {
