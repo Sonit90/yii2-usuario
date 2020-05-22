@@ -156,7 +156,9 @@ class User extends ActiveRecord
     public function behaviors()
     {
         $behaviors = [
-            TimestampBehavior::class,
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'createdAt',
+            'updatedAtAttribute' => 'updatedAt',
         ];
 
         if ($this->module->enableGdprCompliance) {
@@ -283,7 +285,7 @@ class User extends ActiveRecord
      */
     public function getProfile()
     {
-        return $this->hasOne($this->getClassMap()->get(Profile::class), ['user_id' => 'id']);
+        return $this->hasOne($this->getClassMap()->get(Profile::class), ['userId' => 'id']);
     }
 
     /**
@@ -298,7 +300,7 @@ class User extends ActiveRecord
             $accounts = $this->hasMany(
                 $this->getClassMap()
                     ->get(SocialNetworkAccount::class),
-                ['user_id' => 'id']
+                ['userId' => 'id']
             )
                 ->all();
 
@@ -314,12 +316,12 @@ class User extends ActiveRecord
      * Returns password age in days
      * @return integer
      */
-    public function getPassword_age()
+    public function getPasswordAge()
     {
-        if (is_null($this->password_changed_at)) {
+        if (is_null($this->passwordChangedAt)) {
             return $this->getModule()->maxPasswordAge;
         }
-        $d = new \DateTime("@{$this->password_changed_at}");
+        $d = new \DateTime("@{$this->passwordChangedAt}");
 
         return $d->diff(new \DateTime(), true)->format("%a");
     }
