@@ -23,7 +23,7 @@ use yii\helpers\Url;
 /**
  * /**
  * @property int $id          Id
- * @property int $useId     User id, null if account is not bind to user
+ * @property int $userId     User id, null if account is not bind to user
  * @property string $provider     Name of service
  * @property string $clienId    Account id
  * @property string $data         Account properties returned by social network (json encoded)
@@ -57,7 +57,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function getIsConnected()
     {
-        return null !== $this->useId;
+        return null !== $this->userId;
     }
 
     /**
@@ -99,7 +99,7 @@ class SocialNetworkAccount extends ActiveRecord
                 'username' => null,
                 'email' => null,
                 'code' => null,
-                'useId' => $user->id,
+                'userId' => $user->id,
             ]
         );
     }
@@ -109,7 +109,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'userId']);
     }
 
     /**

@@ -24,7 +24,7 @@ use yii\helpers\Url;
 /**
  * Token Active Record model.
  *
- * @property int $useId
+ * @property int $userId
  * @property string $code
  * @property int $type
  * @property string $url
@@ -59,7 +59,7 @@ class Token extends ActiveRecord
     {
         if ($insert) {
             $this->setAttribute('code', $this->make(SecurityHelper::class)->generateRandomString());
-            static::deleteAll(['useId' => $this->useId, 'type' => $this->type]);
+            static::deleteAll(['userId' => $this->userId, 'type' => $this->type]);
             $this->setAttribute('createAt', time());
         }
 
@@ -79,7 +79,7 @@ class Token extends ActiveRecord
      */
     public static function primaryKey()
     {
-        return ['useId', 'code', 'type'];
+        return ['userId', 'code', 'type'];
     }
 
     /**
@@ -87,7 +87,7 @@ class Token extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'userId']);
     }
 
     /**
@@ -96,7 +96,7 @@ class Token extends ActiveRecord
      */
     public function getUrl()
     {
-        return Url::to([$this->routes[$this->type], 'id' => $this->useId, 'code' => $this->code], true);
+        return Url::to([$this->routes[$this->type], 'id' => $this->userId, 'code' => $this->code], true);
     }
 
     /**

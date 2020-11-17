@@ -63,7 +63,7 @@ class AuthDbManagerComponent extends DbManager implements AuthManagerInterface
             ->select('b.*')
             ->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])
             ->where('{{a}}.[[item_name]]={{b}}.[[name]]')
-            ->andWhere(['a.useId' => (string)$userId]);
+            ->andWhere(['a.userId' => (string)$userId]);
 
         $roles = [];
         foreach ($query->all($this->db) as $row) {

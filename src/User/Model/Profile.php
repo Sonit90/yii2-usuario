@@ -25,7 +25,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * @property int $useId
+ * @property int $userId
  * @property string $name
  * @property string $publiEmail
  * @property string $location
@@ -133,7 +133,7 @@ class Profile extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'useId']);
+        return $this->hasOne($this->getClassMap()->get(User::class), ['id' => 'userId']);
     }
 
 

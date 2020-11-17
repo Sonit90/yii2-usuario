@@ -101,7 +101,7 @@ class SocialNetworkAuthenticateService implements ServiceInterface
         );
 
         if (($user = $this->getUser($account)) instanceof User) {
-            $account->useId = $user->id;
+            $account->userId = $user->id;
             $account->save(false);
         }
 
