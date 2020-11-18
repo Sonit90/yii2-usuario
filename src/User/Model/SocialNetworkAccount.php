@@ -31,7 +31,7 @@ use yii\helpers\Url;
  * @property string $code
  * @property string $email
  * @property string $username
- * @property int $createAt
+ * @property int $createdAt
  * @property User $user        User that this account is connected for
  */
 class SocialNetworkAccount extends ActiveRecord
@@ -80,7 +80,7 @@ class SocialNetworkAccount extends ActiveRecord
     public function getConnectionUrl()
     {
         $code = Yii::$app->security->generateRandomString();
-        $this->updateAttributes(['code' => md5($code)]);
+        $this->updatedAttributes(['code' => md5($code)]);
 
         return Url::to(['/user/registration/connect', 'code' => $code]);
     }
@@ -94,7 +94,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function connect(User $user)
     {
-        return $this->updateAttributes(
+        return $this->updatedAttributes(
             [
                 'username' => null,
                 'email' => null,

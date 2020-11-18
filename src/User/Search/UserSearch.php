@@ -30,7 +30,7 @@ class UserSearch extends Model
     /**
      * @var int
      */
-    public $createAt;
+    public $createdAt;
     /**
      * @var int
      */
@@ -66,8 +66,8 @@ class UserSearch extends Model
     public function rules()
     {
         return [
-            'safeFields' => [['username', 'email', 'registratioIp', 'createAt', 'lasLogiAt, lasLogiIp'], 'safe'],
-            'createdDefault' => [['createAt', 'lasLogiAt'], 'default', 'value' => null],
+            'safeFields' => [['username', 'email', 'registratioIp', 'createdAt', 'lasLogiAt, lasLogiIp'], 'safe'],
+            'createdDefault' => [['createdAt', 'lasLogiAt'], 'default', 'value' => null],
         ];
     }
 
@@ -79,7 +79,7 @@ class UserSearch extends Model
         return [
             'username' => Yii::t('usuario', 'Username'),
             'email' => Yii::t('usuario', 'Email'),
-            'createAt' => Yii::t('usuario', 'Registration time'),
+            'createdAt' => Yii::t('usuario', 'Registration time'),
             'registratioIp' => Yii::t('usuario', 'Registration IP'),
             'lasLogiAt' => Yii::t('usuario', 'Last login time'),
             'lasLogiIp' => Yii::t('usuario', 'Last login IP'),
@@ -106,9 +106,9 @@ class UserSearch extends Model
             return $dataProvider;
         }
 
-        if ($this->createAt !== null) {
-            $date = strtotime($this->createAt);
-            $query->andFilterWhere(['between', 'createAt', $date, $date + 3600 * 24]);
+        if ($this->createdAt !== null) {
+            $date = strtotime($this->createdAt);
+            $query->andFilterWhere(['between', 'createdAt', $date, $date + 3600 * 24]);
         }
 
         if ($this->lasLogiAt !== null) {

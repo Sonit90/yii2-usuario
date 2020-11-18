@@ -81,7 +81,7 @@ class TokenFactory
      * @param $type
      *
      * @throws InvalidConfigException
-     * @return Token|\object
+     * @return Token|object
      */
     protected static function make($userId, $type)
     {

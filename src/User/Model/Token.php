@@ -29,7 +29,7 @@ use yii\helpers\Url;
  * @property int $type
  * @property string $url
  * @property bool $isExpired
- * @property int $createAt
+ * @property int $createdAt
  * @property User $user
  */
 class Token extends ActiveRecord
@@ -60,7 +60,7 @@ class Token extends ActiveRecord
         if ($insert) {
             $this->setAttribute('code', $this->make(SecurityHelper::class)->generateRandomString());
             static::deleteAll(['userId' => $this->userId, 'type' => $this->type]);
-            $this->setAttribute('createAt', time());
+            $this->setAttribute('createdAt', time());
         }
 
         return parent::beforeSave($insert);
@@ -113,7 +113,7 @@ class Token extends ActiveRecord
             throw new RuntimeException('Unknown Token type.');
         }
 
-        return ($this->createAt + $expirationTime) < time();
+        return ($this->createdAt + $expirationTime) < time();
     }
 
     /**
