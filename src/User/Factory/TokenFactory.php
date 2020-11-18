@@ -85,6 +85,6 @@ class TokenFactory
      */
     protected static function make($userId, $type)
     {
-        return Yii::createObject(['class' => Token::class, 'user_id' => $userId, 'type' => $type]);
+        return Yii::createObject(['class' => Token::class, 'userId' => $userId, 'type' => $type]);
     }
 }
