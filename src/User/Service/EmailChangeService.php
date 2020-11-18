@@ -47,33 +47,19 @@ class EmailChangeService implements ServiceInterface
             ->one();
 
         if ($token === null || $token->getIsExpired()) {
-            Yii::$app->session->setFlash('danger', Yii::t('usuario', 'Your confirmation token is invalid or expired'));
+
 
             return false;
         }
         $token->delete();
         if (empty($this->model->unconfirmeEmail)) {
-            Yii::$app->session->setFlash('danger', Yii::t('usuario', 'An error occurred processing your request'));
         } elseif ($this->userQuery->whereEmail($this->model->unconfirmeEmail)->exists() === false) {
             if ($this->getModule()->emailChangeStrategy === MailChangeStrategyInterface::TYPE_SECURE) {
                 if ($token->type === Token::TYPE_CONFIRM_NEW_EMAIL) {
                     $this->model->flags |= User::NEW_EMAIL_CONFIRMED;
-                    Yii::$app->session->setFlash(
-                        'success',
-                        Yii::t(
-                            'usuario',
-                            'Awesome, almost there. Now you need to click the confirmation link sent to your old email address.'
-                        )
-                    );
                 } elseif ($token->type === Token::TYPE_CONFIRM_OLD_EMAIL) {
                     $this->model->flags |= User::OLD_EMAIL_CONFIRMED;
-                    Yii::$app->session->setFlash(
-                        'success',
-                        Yii::t(
-                            'usuario',
-                            'Awesome, almost there. Now you need to click the confirmation link sent to your new email address.'
-                        )
-                    );
+
                 }
             }
             if ((($this->model->flags & User::NEW_EMAIL_CONFIRMED) && ($this->model->flags & User::OLD_EMAIL_CONFIRMED))
@@ -81,7 +67,6 @@ class EmailChangeService implements ServiceInterface
             ) {
                 $this->model->email = $this->model->unconfirmeEmail;
                 $this->model->unconfirmedEmail = null;
-                Yii::$app->session->setFlash('success', Yii::t('usuario', 'Your email address has been changed'));
             }
 
             return $this->model->save(false);

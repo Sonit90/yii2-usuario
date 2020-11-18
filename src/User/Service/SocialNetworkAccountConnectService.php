@@ -58,15 +58,10 @@ class SocialNetworkAccountConnectService implements ServiceInterface
             /** @var User $user */
             $user = Yii::$app->user->identity;
             $account->link('user', $user);
-            Yii::$app->session->setFlash('success', Yii::t('usuario', 'Your account has been connected'));
             $this->controller->trigger(SocialNetworkAuthEvent::EVENT_AFTER_CONNECT, $event);
 
             return true;
         }
-        Yii::$app->session->setFlash(
-            'danger',
-            Yii::t('usuario', 'This account has already been connected to another user')
-        );
 
         return false;
     }

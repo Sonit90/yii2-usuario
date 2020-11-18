@@ -70,14 +70,6 @@ class UserRegisterService implements ServiceInterface
                 $this->mailService->setViewParam('token', $token);
             }
             if (!$this->sendMail($model)) {
-                Yii::$app->session->setFlash(
-                    'warning',
-                    Yii::t(
-                        'usuario',
-                        'Error sending registration message to "{email}". Please try again later.',
-                        ['email' => $model->email]
-                    )
-                );
                 $transaction->rollBack();
                 return false;
             }

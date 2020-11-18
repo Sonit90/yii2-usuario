@@ -41,12 +41,6 @@ class PasswordRecoveryService implements ServiceInterface
     public function run()
     {
         try {
-            if ($this->getModule()->enableFlashMessages == true) {
-                Yii::$app->session->setFlash(
-                    'info',
-                    Yii::t('usuario', 'An email with instructions to create a new password has been sent to {email} if it is associated with an {appName} account. Your existing password has not been changed.', ['email' => $this->email, 'appName' => Yii::$app->name])
-                );
-            }
 
             /** @var User $user */
             $user = $this->query->whereEmail($this->email)->one();
