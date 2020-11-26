@@ -20,6 +20,7 @@ class m000000_000005_create_sessions_table extends Migration
         $this->createTable(
             '{{%sessions}}',
             [
+                'id' => $this->primaryKey(),
                 'userId' => $this->integer(),
                 'ua' => $this->string(200)->notNull(),
                 'refreshToken' => $this->string(200),
@@ -33,7 +34,7 @@ class m000000_000005_create_sessions_table extends Migration
         $this->createIndex(
             'idxSessionsUserIdCodeType',
             '{{%sessions}}',
-            ['userId', 'refreshToken', 'fingerprint'],
+            ['id','userId', 'refreshToken', 'fingerprint'],
             true
         );
 
