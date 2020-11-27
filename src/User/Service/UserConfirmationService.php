@@ -33,7 +33,7 @@ class UserConfirmationService implements ServiceInterface
         $event = $this->make(UserEvent::class, [$model]);
 
         $this->model->trigger(UserEvent::EVENT_BEFORE_CONFIRMATION, $event);
-        if ((bool)$this->model->updatedAttributes(['confirmedAt' => time()])) {
+        if ((bool)$this->model->updateAttributes(['confirmedAt' => time()])) {
             $this->model->trigger(UserEvent::EVENT_AFTER_CONFIRMATION, $event);
 
             return true;

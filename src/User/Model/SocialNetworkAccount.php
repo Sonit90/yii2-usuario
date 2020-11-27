@@ -80,7 +80,7 @@ class SocialNetworkAccount extends ActiveRecord
     public function getConnectionUrl()
     {
         $code = Yii::$app->security->generateRandomString();
-        $this->updatedAttributes(['code' => md5($code)]);
+        $this->updateAttributes(['code' => md5($code)]);
 
         return Url::to(['/user/registration/connect', 'code' => $code]);
     }
@@ -94,7 +94,7 @@ class SocialNetworkAccount extends ActiveRecord
      */
     public function connect(User $user)
     {
-        return $this->updatedAttributes(
+        return $this->updateAttributes(
             [
                 'username' => null,
                 'email' => null,
